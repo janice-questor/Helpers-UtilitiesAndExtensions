@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Unimake.Utility.Basic
+﻿namespace System.Linq.Expressions
 {
     public class ExpressionPredicateRewriter : ExpressionVisitor
     {

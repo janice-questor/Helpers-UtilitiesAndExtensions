@@ -13,7 +13,7 @@ namespace System
         {
             if(exception is null)
             {
-                return string.Empty;    
+                return string.Empty;
             }
 
             var sb = new StringBuilder();

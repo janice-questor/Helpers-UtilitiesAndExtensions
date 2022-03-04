@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Company>Unimake Software</Company>
+		<Copyright>Unimake Software 2022 ©</Copyright>
+		<PackageProjectUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</RepositoryUrl>
+		<PackageTags>unimake;Utils;helpers;utilities</PackageTags>
+		<AssemblyVersion>$(PackageVersion)</AssemblyVersion>
+		<FileVersion>$(PackageVersion)</FileVersion>
+		<Version>2022.03.04.1204</Version>
+		<Authors>Unimake Software</Authors>
+		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Substring(0,7))</RootNamespace>
+		<Description>Utilitários e Helpers</Description>
+		<ApplicationIcon>unimake.ico</ApplicationIcon>
+		<PackageIcon>unimake.png</PackageIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="unimake.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\resources\image\unimake.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+</Project>

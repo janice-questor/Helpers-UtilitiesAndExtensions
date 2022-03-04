@@ -30,6 +30,7 @@ namespace System
         /// </summary>
         /// <param name="date">Não é utilizado para nada, somente para atender a extension</param>
         /// <returns>Primeiro dia da semana de acordo com a cultura</returns>
+        [Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "O parâmetro é usado apenas para extender o tipo")]
         public static DayOfWeek FirstDayOfWeek(this DateTime date) => CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
 
         /// <summary>
