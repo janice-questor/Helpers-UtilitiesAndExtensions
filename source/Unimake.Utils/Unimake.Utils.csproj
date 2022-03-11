@@ -10,10 +10,10 @@
 		<PackageTags>unimake;Utils;helpers;utilities</PackageTags>
 		<AssemblyVersion>$(PackageVersion)</AssemblyVersion>
 		<FileVersion>$(PackageVersion)</FileVersion>
-		<Version>2022.03.04.1819</Version>
+		<Version>2022.03.11.1344</Version>
 		<Authors>Unimake Software</Authors>
 		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Substring(0,7))</RootNamespace>
-		<Description>Utilitários e Helpers</Description>
+		<Description>Utilitários, Helpers, Formatters, Validadores.</Description>
 		<ApplicationIcon>unimake.ico</ApplicationIcon>
 		<PackageIcon>unimake.png</PackageIcon>
 	</PropertyGroup>
