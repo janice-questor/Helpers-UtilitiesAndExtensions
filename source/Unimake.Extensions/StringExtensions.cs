@@ -402,6 +402,26 @@ namespace System
         }
 
         /// <summary>
+        /// Remove os espaços desnecessários da string, tais como
+        /// espaços duplos, no inicio ou final da sentença.
+        /// <para>Se a string for nula, vazia ou somente espaços em branco, retorna uma string vazia</para>
+        /// </summary>
+        /// <returns>Retorna a string sem os espaços desnecessários.</returns>
+        public static string RemoveExtraSpaces(this string content)
+        {
+            if(string.IsNullOrWhiteSpace(content))
+            {
+                return "";
+            }
+
+            var regex = new Regex(@"\s{2,}");
+            content = regex.Replace(content, " ")
+                           .Trim();
+
+            return content;
+        }
+
+        /// <summary>
         /// Remove todos os caracteres especiais, incluindo espaços se removeSpace for verdadeiro, da string e retorna
         /// </summary>
         /// <param name="value">string que deverá ser limpa.</param>
