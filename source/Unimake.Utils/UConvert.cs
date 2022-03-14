@@ -656,7 +656,7 @@ namespace Unimake
         /// </summary>
         /// <param name="value"> Enumerador a ser convertido em <see cref="string"/> </param>
         /// <returns> </returns>
-        public static string ToString(Enum value)
+        public static string ToString(Enum value, bool getFromDescriptionAttributeIfExist = true)
         {
             var fi = value.GetType().GetField(value.ToString());
 
