@@ -425,9 +425,26 @@ namespace Unimake
         /// <returns> </returns>
         public static object ToEnum(Type enumType, object value)
         {
+            if(value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            var valueToString = value.ToString();
+
+            // Aqui iremos garantir um número inteiro, pois pode ser usado no eField.GetValue(e)
+            // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/enums#enum-declarations
+            if(long.TryParse(value.ToString(), out var result))
+            {
+                valueToString = result.ToString();
+            }
+
+            var eField = enumType.GetField("value__");
+
             foreach(var e in Enum.GetValues(enumType))
             {
-                if(ToString(e).Equals(value.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                if(e.ToString().Equals(valueToString, StringComparison.InvariantCultureIgnoreCase) ||
+                   eField.GetValue(e)?.ToString() == valueToString)
                 {
                     return e;
                 }
@@ -635,9 +652,9 @@ namespace Unimake
 
         /// <summary>
         /// Converte um enumerador em <see cref="string"/>
-        /// <para>Se os valores do enumerador possuírem o atributo <see cref="DescriptionAttribute"/> usa descrição do atributo</para>
+        /// <para>Se os valores do enumerador possuírem o atributo <see cref="DescriptionAttribute"/> e <paramref name="getFromDescriptionAttributeIfExist"/> for verdadeiro  usa descrição do atributo</para>
         /// </summary>
-        /// <param name="value"> Enumerador a ser convertido </param>
+        /// <param name="value"> Enumerador a ser convertido em <see cref="string"/> </param>
         /// <returns> </returns>
         public static string ToString(Enum value)
         {
@@ -648,11 +665,14 @@ namespace Unimake
                 return value.ToString();
             }
 
-            var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-
-            if(attributes.Length > 0)
+            if(getFromDescriptionAttributeIfExist)
             {
-                return attributes[0].Description;
+                var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+                if(attributes.Length > 0)
+                {
+                    return attributes[0].Description;
+                }
             }
 
             return value.ToString();
