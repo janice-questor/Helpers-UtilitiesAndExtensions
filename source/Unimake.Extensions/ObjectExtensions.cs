@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace System
 {
@@ -18,11 +20,12 @@ namespace System
         /// <typeparam name="TDestination"> Tipo de destino que irá receber as cópias </typeparam>
         /// <param name="source"> Valor de origem para cópia das propriedades. </param>
         /// <param name="destination"> Objeto que vai receber as propriedades em cópia </param>
+        /// <param name="ignoreCase">Se verdadeiro, ignora se o nome da propriedade no objeto de destino está com o nome sensível ao caso no objeto de origem.</param>
         /// <typeparam name="TSource"> </typeparam>
         /// <exception cref="Exception">Exceções de forma generalizada, quando acontecer qualquer erro durante a cópia.</exception>
         /// <returns>Erros, em caso de tentativas de conversões não permitidas
         /// <para>Objeto do tipo <typeparamref name="TDestination"/> com as propriedades copiadas de <typeparamref name="TSource"/></para></returns>
-        public static void CopyTo<TSource, TDestination>(this TSource source, ref TDestination destination)
+        public static void CopyTo<TSource, TDestination>(this TSource source, ref TDestination destination, bool ignoreCase = true)
         {
             if(source == null)
             {
@@ -46,9 +49,43 @@ namespace System
 
             foreach(var sourceProperty in sourceProperties)
             {
-                var destinationProperty = destinationProperties.FirstOrDefault(w => w.Name == sourceProperty.Name);
-                destinationProperty?.SetValue(destination, sourceProperty.GetValue(source));
+                var destinationProperty = destinationProperties.FirstOrDefault(w => w.Name.Equals(sourceProperty.Name, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.CurrentCulture));
+
+                if(destinationProperty == null)
+                {
+                    continue;
+                }
+
+                var sourceValue = sourceProperty.GetValue(source);
+
+                try
+                {
+                    destinationProperty.SetValue(destination, sourceValue);
+                }
+                catch(Exception ex)
+                {
+                    throw new ArgumentException($"Ocorreu um erro ao preencher a propriedade '{sourceProperty.Name}' com o valor '{sourceValue}' do tipo '{sourceProperty.PropertyType.Name}' no tipo esperado pelo objeto de destino: '{typeof(TDestination).FullName}.{destinationProperty.PropertyType.Name}'. \nErro: {ex.Message}");
+                }
             }
+        }
+
+        /// <summary>
+        /// Copia os valores em <paramref name="source" /> para o tipo definido em <typeparamref name="TDestination" />
+        /// <para>Este método faz uma copia apenas das propriedades públicas e que possam ser escritas.</para>
+        /// <para>Copia apenas nomes de propriedades iguais.</para>
+        /// </summary>
+        /// <typeparam name="TDestination"> Tipo de destino que irá receber as cópias </typeparam>
+        /// <param name="source"> Valor de origem para cópia das propriedades. </param>
+        /// <typeparam name="TSource"> </typeparam>
+        /// <exception cref="Exception">Exceções de forma generalizada, quando acontecer qualquer erro durante a cópia.</exception>
+        /// <returns>Erros, em caso de tentativas de conversões não permitidas
+        /// <para>Objeto do tipo <typeparamref name="TDestination"/> com as propriedades copiadas de <typeparamref name="TSource"/></para></returns>
+        public static TDestination CopyTo<TSource, TDestination>(this TSource source)
+            where TDestination : new()
+        {
+            var result = new TDestination();
+            source.CopyTo(ref result);
+            return result;
         }
 
         /// <summary>
@@ -57,7 +94,7 @@ namespace System
         /// <param name="obj">objeto para verificação</param>
         /// <typeparam name="T">Tipo para verificação da implementação</typeparam>
         /// <returns>Verdadeiro se o objeto implementa a interface, ou falso</returns>
-        public static bool IsImplementationOfInterface<T>(this object obj) => IsImplementationOfInterface(obj, typeof(T));
+        public static bool IsImplementationOfInterface<T>(this object obj) => obj.IsImplementationOfInterface(typeof(T));
 
         /// <summary>
         /// Retorna verdadeiro se o objeto implementa o tipo passado
@@ -76,15 +113,10 @@ namespace System
 
             var lhsT = obj.GetType();
 
-            if(type.IsGenericType)
-            {
-                result = lhsT.GetInterfaces().Any(x => x.IsGenericType &&
-                                                       x.GetGenericTypeDefinition() == type);
-            }
-            else
-            {
-                result = lhsT.GetInterfaces().Any(x => x == type);
-            }
+            result = type.IsGenericType
+                ? lhsT.GetInterfaces().Any(x => x.IsGenericType &&
+                                                       x.GetGenericTypeDefinition() == type)
+                : lhsT.GetInterfaces().Any(x => x == type);
 
             return result;
         }
@@ -172,20 +204,17 @@ namespace System
             if(considerNumericZeroValueAsEmpty &&
                 value.GetType().IsNumeric())
             {
-                decimal.TryParse(value.ToString(),
-                                        Globalization.NumberStyles.Any,
-                                        Globalization.NumberFormatInfo.InvariantInfo,
+                _ = decimal.TryParse(value.ToString(),
+                                        System.Globalization.NumberStyles.Any,
+                                        System.Globalization.NumberFormatInfo.InvariantInfo,
                                         out var result);
 
                 return result == 0;
             }
 
-            if(value is Collections.IEnumerable enumerable)
-            {
-                return IEnumerableExtensions.IsNullOrEmpty(enumerable);
-            }
-
-            return string.IsNullOrEmpty(value.ToString());
+            return value is System.Collections.IEnumerable enumerable
+                ? IEnumerableExtensions.IsNullOrEmpty(enumerable)
+                : string.IsNullOrEmpty(value.ToString());
         }
 
         #endregion Public Methods

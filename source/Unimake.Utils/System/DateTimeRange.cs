@@ -25,7 +25,7 @@ namespace System
         public DateTime End { get; set; }
 
         /// <summary>
-        /// Data incial do intervalo
+        /// Data inicial do intervalo
         /// </summary>
         public DateTime Start { get; set; }
 
