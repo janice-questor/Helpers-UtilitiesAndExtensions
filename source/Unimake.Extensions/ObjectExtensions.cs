@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -21,11 +20,14 @@ namespace System
         /// <param name="source"> Valor de origem para cópia das propriedades. </param>
         /// <param name="destination"> Objeto que vai receber as propriedades em cópia </param>
         /// <param name="ignoreCase">Se verdadeiro, ignora se o nome da propriedade no objeto de destino está com o nome sensível ao caso no objeto de origem.</param>
+        /// <param name="convertFrom">Função chamada quando não for possível converter o valor. Se nulo, será lançado um erro de <see cref="ArgumentException"/> </param>
         /// <typeparam name="TSource"> </typeparam>
         /// <exception cref="Exception">Exceções de forma generalizada, quando acontecer qualquer erro durante a cópia.</exception>
+        /// <exception cref="ArgumentException">Lançada quando um tipo não pode ser convertido e a função <paramref name="convertFrom"/> não foi informada.</exception>
+        /// <exception cref="ArgumentNullException">Lançada quando <paramref name="source"/> ou <paramref name="destination"/> forem nulos.</exception>
         /// <returns>Erros, em caso de tentativas de conversões não permitidas
         /// <para>Objeto do tipo <typeparamref name="TDestination"/> com as propriedades copiadas de <typeparamref name="TSource"/></para></returns>
-        public static void CopyTo<TSource, TDestination>(this TSource source, ref TDestination destination, bool ignoreCase = true)
+        public static void CopyTo<TSource, TDestination>(this TSource source, ref TDestination destination, bool ignoreCase = true, Func<(PropertyInfo Source, PropertyInfo Destination, object Value), object> convertFrom = null)
         {
             if(source == null)
             {
@@ -37,34 +39,36 @@ namespace System
                 throw new ArgumentNullException(nameof(destination));
             }
 
-            var sourceProperties = source.GetType()
-                                         .GetProperties()
-                                         .Where(w => w.CanRead)
-                                         .Select(s => s);
-
-            var destinationProperties = destination.GetType()
-                                                   .GetProperties()
-                                                   .Where(w => w.CanWrite)
-                                                   .Select(s => s);
-
-            foreach(var sourceProperty in sourceProperties)
+            var enumerable = from w in source.GetType().GetProperties()
+                             where w.CanRead
+                             select w into s
+                             select s;
+            var source2 = from w in destination.GetType().GetProperties()
+                          where w.CanWrite
+                          select w into s
+                          select s;
+            foreach(var sourceProperty in enumerable)
             {
-                var destinationProperty = destinationProperties.FirstOrDefault(w => w.Name.Equals(sourceProperty.Name, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.CurrentCulture));
+                var propertyDest = source2.FirstOrDefault((PropertyInfo w) => w.Name.Equals(sourceProperty.Name, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.CurrentCulture));
 
-                if(destinationProperty == null)
+                if(!(propertyDest == null))
                 {
-                    continue;
-                }
+                    var value = sourceProperty.GetValue(source);
+                    try
+                    {
+                        propertyDest.SetValue(destination, value);
+                    }
+                    catch(Exception ex)
+                    {
+                        if(convertFrom != null)
+                        {
+                            value = convertFrom((sourceProperty, propertyDest, value));
+                            propertyDest.SetValue(destination, value);
+                            continue;
+                        }
 
-                var sourceValue = sourceProperty.GetValue(source);
-
-                try
-                {
-                    destinationProperty.SetValue(destination, sourceValue);
-                }
-                catch(Exception ex)
-                {
-                    throw new ArgumentException($"Ocorreu um erro ao preencher a propriedade '{sourceProperty.Name}' com o valor '{sourceValue}' do tipo '{sourceProperty.PropertyType.Name}' no tipo esperado pelo objeto de destino: '{typeof(TDestination).FullName}.{destinationProperty.PropertyType.Name}'. \nErro: {ex.Message}");
+                        throw new ArgumentException($"Ocorreu um erro ao preencher a propriedade '{sourceProperty.Name}' com o valor '{value}' do tipo '{sourceProperty.PropertyType.Name}' no tipo esperado pelo objeto de destino: '{typeof(TDestination).FullName}.{propertyDest.PropertyType.Name}'. \nErro: {ex.Message}");
+                    }
                 }
             }
         }
