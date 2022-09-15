@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Unimake.Cryptography\Unimake.Cryptography.csproj" />
     <ProjectReference Include="..\Unimake.Extensions\Unimake.Extensions.csproj" />
+    <ProjectReference Include="..\Unimake.Primitives\Unimake.Primitives.csproj" />
     <ProjectReference Include="..\Unimake.Utils\Unimake.Utils.csproj" />
   </ItemGroup>
 

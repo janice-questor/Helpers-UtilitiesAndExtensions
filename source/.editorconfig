@@ -1,7 +1,7 @@
 ﻿[*.{cs,vb}]
 
 # IDE0130: Namespace does not match folder structure
-dotnet_style_namespace_match_folder = false:suggestion
+dotnet_style_namespace_match_folder = true:suggestion
 
 # Default severity for all analyzer diagnostics
 dotnet_analyzer_diagnostic.severity = none
@@ -82,6 +82,7 @@ dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:sil
 dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
 dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
 dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
+dotnet_diagnostic.CA1050.severity = suggestion
 
 [*.cs]
 csharp_indent_labels = one_less_than_current
@@ -117,3 +118,4 @@ csharp_style_allow_blank_lines_between_consecutive_braces_experimental = false:s
 csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimental = true:silent
 csharp_style_conditional_delegate_call = true:suggestion
 csharp_style_prefer_parameter_null_checking = true:suggestion
+csharp_style_prefer_top_level_statements = true:suggestion

@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unimake.Cryptography", "Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unimake.Test", "Unimake.Test\Unimake.Test.csproj", "{1462FBFF-0260-4E14-AE28-C0C82DB0823E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unimake.Primitives", "Unimake.Primitives\Unimake.Primitives.csproj", "{A350A6BF-640C-4635-8EAD-BF5716B04C1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{1462FBFF-0260-4E14-AE28-C0C82DB0823E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1462FBFF-0260-4E14-AE28-C0C82DB0823E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1462FBFF-0260-4E14-AE28-C0C82DB0823E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A350A6BF-640C-4635-8EAD-BF5716B04C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A350A6BF-640C-4635-8EAD-BF5716B04C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A350A6BF-640C-4635-8EAD-BF5716B04C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A350A6BF-640C-4635-8EAD-BF5716B04C1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{08376F7E-8E8F-40AF-B031-403A01509961} = {45A6A259-4457-4550-8000-E9FA85933C58}
 		{194591E5-B5A7-4AFD-AFFE-B809B8B29040} = {45A6A259-4457-4550-8000-E9FA85933C58}
 		{1462FBFF-0260-4E14-AE28-C0C82DB0823E} = {9AF507DE-A372-4E0D-87BE-580604080F6C}
+		{A350A6BF-640C-4635-8EAD-BF5716B04C1C} = {45A6A259-4457-4550-8000-E9FA85933C58}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB309095-8C76-44DD-88B1-C30B8B4B0334}

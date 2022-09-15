@@ -13,7 +13,7 @@
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<Authors>Unimake Software</Authors>
 		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-		<Description>Utilitários para criptografia de arquivos, strings e certificados.</Description>
+		<Description>Utilitários, Helpers, Formatters, Validadores.</Description>
 		<ApplicationIcon>unimake.ico</ApplicationIcon>
 		<PackageIcon>unimake.png</PackageIcon>
 	</PropertyGroup>
@@ -27,6 +27,10 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
 </Project>
