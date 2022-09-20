@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Unimake.Primitives.Collections.Page
 {
@@ -9,11 +10,22 @@ namespace Unimake.Primitives.Collections.Page
     {
         #region Internal Constructors
 
+        [JsonConstructor]
+        internal RecordInfo(long pageCount,
+                            long pageSize,
+                            long recordCount)
+        {
+            PageCount = pageCount;
+            PageSize = pageSize;
+            RecordCount = recordCount;
+        }
+
         /// <summary>
         /// Instância
         /// </summary>
         /// <param name="recordCount"></param>
         /// <param name="pageInfo"></param>
+
         internal RecordInfo(long recordCount, PageInfo pageInfo)
         {
             PageSize = pageInfo.PageSize;

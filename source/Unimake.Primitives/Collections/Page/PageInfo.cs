@@ -13,6 +13,22 @@ namespace Unimake.Primitives.Collections.Page
 
         #region Internal Constructors
 
+        [JsonConstructor]
+        internal PageInfo(int currentPage,
+                          bool filtered,
+                          int itemsCount,
+                          int pageSize,
+                          int totalCount,
+                          int totalPages)
+        {
+            CurrentPage = currentPage;
+            Filtered = filtered;
+            ItemsCount = itemsCount;
+            PageSize = pageSize;
+            TotalCount = totalCount;
+            TotalPages = totalPages;
+        }
+
         internal PageInfo()
         {
         }
