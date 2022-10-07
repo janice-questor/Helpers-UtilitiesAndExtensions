@@ -8,8 +8,8 @@
 		<PackageProjectUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</RepositoryUrl>
 		<PackageTags>unimake;extensions;helpers;utilities</PackageTags>
-		<AssemblyVersion>2022.09.22.0854</AssemblyVersion>
-		<Version>20220922.0854.33</Version>
+		<AssemblyVersion>2022.10.06.1745</AssemblyVersion>
+		<Version>20221006.1745.32</Version>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<Authors>Unimake Software</Authors>
 		<ApplicationIcon>unimake.ico</ApplicationIcon>
