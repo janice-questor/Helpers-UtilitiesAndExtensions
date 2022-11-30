@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Unimake.Primitives.Collections.Page
 {
@@ -10,30 +11,6 @@ namespace Unimake.Primitives.Collections.Page
         /// <summary>
         /// Número da página atual
         /// </summary>
-
-        #region Internal Constructors
-
-        [JsonConstructor]
-        internal PageInfo(int currentPage,
-                          bool filtered,
-                          int itemsCount,
-                          int pageSize,
-                          int totalCount,
-                          int totalPages)
-        {
-            CurrentPage = currentPage;
-            Filtered = filtered;
-            ItemsCount = itemsCount;
-            PageSize = pageSize;
-            TotalCount = totalCount;
-            TotalPages = totalPages;
-        }
-
-        internal PageInfo()
-        {
-        }
-
-        #endregion Internal Constructors
 
         #region Public Properties
 
@@ -79,8 +56,26 @@ namespace Unimake.Primitives.Collections.Page
         /// Quantidade de páginas desta lista
         /// </summary>
         [JsonProperty(Order = 2)]
-        public int TotalPages { get; internal set; }
+        public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
 
         #endregion Public Properties
+
+        #region Public Constructors
+
+        [JsonConstructor]
+        public PageInfo(int currentPage,
+                        bool filtered,
+                        int itemsCount,
+                        int pageSize,
+                        int totalCount)
+        {
+            CurrentPage = currentPage;
+            Filtered = filtered;
+            ItemsCount = itemsCount;
+            PageSize = pageSize;
+            TotalCount = totalCount;
+        }
+
+        #endregion Public Constructors
     }
 }

@@ -10,28 +10,10 @@ namespace Unimake.Primitives.Collections.Page
     {
         #region Internal Constructors
 
-        [JsonConstructor]
-        internal RecordInfo(long pageCount,
-                            long pageSize,
-                            long recordCount)
-        {
-            PageCount = pageCount;
-            PageSize = pageSize;
-            RecordCount = recordCount;
-        }
-
-        /// <summary>
-        /// Instância
-        /// </summary>
-        /// <param name="recordCount"></param>
-        /// <param name="pageInfo"></param>
-
         internal RecordInfo(long recordCount, PageInfo pageInfo)
         {
             PageSize = pageInfo.PageSize;
             RecordCount = recordCount;
-            PageCount = (int)Math.Ceiling(RecordCount / (double)PageSize);
-            pageInfo.Filtered = pageInfo.TotalCount != recordCount;
         }
 
         #endregion Internal Constructors
@@ -39,9 +21,14 @@ namespace Unimake.Primitives.Collections.Page
         #region Public Properties
 
         /// <summary>
+        /// Instância
+        /// </summary>
+        /// <param name="recordCount"></param>
+        /// <param name="pageInfo"></param>
+        /// <summary>
         /// Quantidade de páginas totais da <see cref="PagedList{T}"/>
         /// </summary>
-        public long PageCount { get; }
+        public long PageCount => (int)Math.Ceiling(RecordCount / (double)PageSize);
 
         /// <summary>
         /// Tamanho da página retornada pela <see cref="PagedList{T}"/>
@@ -54,5 +41,18 @@ namespace Unimake.Primitives.Collections.Page
         public long RecordCount { get; }
 
         #endregion Public Properties
+
+        #region Public Constructors
+
+        [JsonConstructor]
+        public RecordInfo(long pageCount,
+                          long pageSize,
+                          long recordCount)
+        {
+            PageSize = pageSize;
+            RecordCount = recordCount;
+        }
+
+        #endregion Public Constructors
     }
 }

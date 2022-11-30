@@ -14,13 +14,13 @@ namespace System.Collections.Generic
         /// </summary>
         /// <typeparam name="T">Tipo de entidade</typeparam>
         /// <param name="items">Itens já paginados que serão exibidos</param>
-        ///<param name="count">Contagem de registros antes da aplicar a paginação</param>
+        ///<param name="totalCount">Contagem de registros antes da aplicar a paginação</param>
         /// <param name="recordCount">Quantidade total de registros no banco de dados</param>
         /// <param name="pageNumber">Número de página atual</param>
         /// <param name="pageSize">Tamanho de registros por página</param>
         /// <returns>Lista paginada</returns>
-        public static PagedList<T> ToPagedList<T>(this IEnumerable<T> items, int count, long recordCount, int pageNumber, int pageSize) =>
-            new PagedList<T>(items, count, recordCount, pageNumber, pageSize);
+        public static PagedList<T> ToPagedList<T>(this IEnumerable<T> items, int totalCount, long recordCount, int pageNumber, int pageSize) =>
+            new PagedList<T>(items, totalCount, recordCount, pageNumber, pageSize, totalCount != recordCount);
 
         /// <summary>
         /// Converte uma consulta em uma lista paginada

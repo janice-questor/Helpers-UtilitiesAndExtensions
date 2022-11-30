@@ -36,24 +36,42 @@ namespace Unimake.Primitives.Collections.Page
         /// Inicia  a lista com os itens desta página
         /// </summary>
         /// <param name="items">Itens já paginados que serão exibidos</param>
-        ///<param name="count">Contagem de registros antes da aplicar a paginação</param>
+        ///<param name="totalCount">Contagem de registros antes da aplicar a paginação</param>
+        /// <param name="recordCount">Quantidade total de registros no banco de dados</param>
+        /// <param name="pageNumber">Número de página atual</param>
+        /// <param name="pageSize">Tamanho de registros por página</param>
+        /// <param name="filtered">Se verdadeiro, o registro está filtrado</param>
+        /// <returns></returns>
+        public PagedList(IEnumerable<T> items, int totalCount, long recordCount, int pageNumber, int pageSize, bool filtered)
+            : this(items, recordCount, new PageInfo(pageNumber, filtered, items.Count(), pageSize, totalCount))
+        {
+        }
+
+        /// <summary>
+        /// Inicia  a lista com os itens desta página
+        /// </summary>
+        /// <param name="items">Itens já paginados que serão exibidos</param>
+        ///<param name="totalCount">Contagem de registros antes da aplicar a paginação</param>
         /// <param name="recordCount">Quantidade total de registros no banco de dados</param>
         /// <param name="pageNumber">Número de página atual</param>
         /// <param name="pageSize">Tamanho de registros por página</param>
         /// <returns></returns>
-        public PagedList(IEnumerable<T> items, int count, long recordCount, int pageNumber, int pageSize)
+        public PagedList(IEnumerable<T> items, int totalCount, long recordCount, int pageNumber, int pageSize)
+            : this(items, recordCount, new PageInfo(pageNumber, totalCount != recordCount, items.Count(), pageSize, totalCount))
         {
+        }
+
+        /// <summary>
+        /// Inicia  a lista com os itens desta página
+        /// </summary>
+        /// <param name="items">Itens já paginados que serão exibidos</param>
+        /// <param name="recordCount">Quantidade total de registros no banco de dados</param>
+        /// <param name="pageInfo">Informações da página de registros</param>
+        /// <returns></returns>
+        public PagedList(IEnumerable<T> items, long recordCount, PageInfo pageInfo)
+        {
+            PageInfo = pageInfo ?? throw new ArgumentNullException(nameof(pageInfo));
             Items = new ReadOnlyCollection<T>(items?.ToList() ?? new List<T>());
-
-            PageInfo = new PageInfo
-            {
-                TotalCount = count,
-                PageSize = pageSize,
-                CurrentPage = pageNumber,
-                TotalPages = (int)Math.Ceiling(count / (double)pageSize),
-                ItemsCount = Items.Count
-            };
-
             RecordInfo = new RecordInfo(recordCount, PageInfo);
         }
 
