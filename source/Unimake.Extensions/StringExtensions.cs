@@ -501,6 +501,22 @@ namespace System
         }
 
         /// <summary>
+        /// Trunca a string respeitando o tamanho definido em <paramref name="maxLength"/>
+        /// </summary>
+        /// <param name="value">String que será truncada</param>
+        /// <param name="maxLength">Tamanho máximo da string</param>
+        /// <returns></returns>
+        public static string Truncate(this string value, int maxLength)
+        {
+            if(string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+
+            return value.Length <= maxLength ? value : value.Substring(0, maxLength);
+        }
+
+        /// <summary>
         ///
         /// </summary>
         /// <param name="value"></param>
