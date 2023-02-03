@@ -122,7 +122,7 @@ namespace Unimake
             {
                 if(conversionType.IsEnum)
                 {
-                    return ToEnum(conversionType, value);
+                    return ToEnum(conversionType, value, true);
                 }
 
                 if(conversionType == typeof(TimeSpan) ||
@@ -394,14 +394,17 @@ namespace Unimake
         }
 
         /// <summary>
-        /// converte um objeto em um valor de <typeparamref name="T"/>
+        /// Converte um enumerador em um valor de <typeparamref name="T"/>
         /// </summary>
         /// <typeparam name="T"> tipo do enum </typeparam>
         /// <param name="value"> valor do objeto </param>
+        /// <param name="tryGetValueUsingDescription">Se verdadeiro, tenta converter usando a descrição. Pesquisa pelo atributo <see cref="DescriptionAttribute"/> </param>
+        /// <param name="returnDefaultIfNull">Se verdadeiro, retorna <see cref="default"/> se o <paramref name="value"/> for nulo.</param>
         /// <returns> </returns>
-        public static T ToEnum<T>(object value)
+        public static T ToEnum<T>(object value, bool tryGetValueUsingDescription = true, bool returnDefaultIfNull = true)
         {
-            if(value == null || string.IsNullOrEmpty(value.ToString()))
+            if(returnDefaultIfNull && (
+               value == null || string.IsNullOrEmpty(value.ToString())))
             {
                 return default;
             }
@@ -413,7 +416,7 @@ namespace Unimake
             catch(ArgumentException)
             {
                 //tenta buscar pela descrição
-                return (T)ToEnum(typeof(T), value);
+                return (T)ToEnum(typeof(T), value, tryGetValueUsingDescription);
             }
         }
 
@@ -422,10 +425,11 @@ namespace Unimake
         /// </summary>
         /// <param name="enumType"> Tipo do enum esperado </param>
         /// <param name="value"> possível valor do enum </param>
+        /// <param name="tryGetValueUsingDescription">Se verdadeiro, tenta converter usando a descrição. Pesquisa pelo atributo <see cref="DescriptionAttribute"/> </param>
         /// <returns> </returns>
-        public static object ToEnum(Type enumType, object value)
+        public static object ToEnum(Type enumType, object value, bool tryGetValueUsingDescription)
         {
-            if(value is null)
+            if(value is null || string.IsNullOrEmpty(value.ToString()))
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -434,7 +438,7 @@ namespace Unimake
 
             // Aqui iremos garantir um número inteiro, pois pode ser usado no eField.GetValue(e)
             // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/enums#enum-declarations
-            if(long.TryParse(value.ToString(), out var result))
+            if(long.TryParse(valueToString, out var result))
             {
                 valueToString = result.ToString();
             }
@@ -447,6 +451,29 @@ namespace Unimake
                    eField.GetValue(e)?.ToString() == valueToString)
                 {
                     return e;
+                }
+            }
+
+            if(!tryGetValueUsingDescription)
+            {
+                return default;
+            }
+
+            foreach(var field in enumType.GetFields())
+            {
+                if(Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
+                {
+                    if(attribute.Description == valueToString)
+                    {
+                        return field.GetValue(null);
+                    }
+                }
+                else
+                {
+                    if(field.Name == valueToString)
+                    {
+                        return field.GetValue(null);
+                    }
                 }
             }
 
