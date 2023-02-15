@@ -23,8 +23,6 @@ namespace Unimake.Primitives.Collections.Page
         /// <summary>
         /// Instância
         /// </summary>
-        /// <param name="recordCount"></param>
-        /// <param name="pageInfo"></param>
         /// <summary>
         /// Quantidade de páginas totais da <see cref="PagedList{T}"/>
         /// </summary>
@@ -44,6 +42,12 @@ namespace Unimake.Primitives.Collections.Page
 
         #region Public Constructors
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="pageCount"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="recordCount"></param>
         [JsonConstructor]
         public RecordInfo(long pageCount,
                           long pageSize,

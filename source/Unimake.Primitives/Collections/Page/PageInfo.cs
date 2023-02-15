@@ -60,6 +60,15 @@ namespace Unimake.Primitives.Collections.Page
 
         #endregion Public Properties
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="currentPage"></param>
+        /// <param name="filtered"></param>
+        /// <param name="itemsCount"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="totalCount"></param>
+
         #region Public Constructors
 
         [JsonConstructor]

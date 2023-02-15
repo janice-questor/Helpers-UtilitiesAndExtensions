@@ -56,3 +56,5 @@ namespace System.Collections.Generic
         #endregion Public Methods
     }
 }
+
+#pragma warning restore IDE0130 //Namespace 'Foo' does not match folder structure, expected 'Foo'

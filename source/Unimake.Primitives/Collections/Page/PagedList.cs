@@ -32,6 +32,14 @@ namespace Unimake.Primitives.Collections.Page
 
         #region Public Constructors
 
+        [JsonConstructor]
+        public PagedList(IEnumerable<T> items, PageInfo pageInfo, RecordInfo recordInfo)
+        {
+            Items = new ReadOnlyCollection<T>(items.ToList());
+            PageInfo = pageInfo;
+            RecordInfo = recordInfo;
+        }
+
         /// <summary>
         /// Inicia  a lista com os itens desta página
         /// </summary>
