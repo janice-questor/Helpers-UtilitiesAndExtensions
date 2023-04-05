@@ -26,13 +26,8 @@ namespace EBank.Solutions.Primitives.Security
 
         private static string EnsureURL(string url, IEnumerable<(string Name, object Value)> queryString)
         {
-            if(url.EndsWith("/"))
-            {
-                url = url.Substring(0, url.Length - 1);
-            }
-
+            url = url.TrimEnd('/');
             url = Uri.EscapeUriString(url + NameValueToQueryString(queryString));
-
             return url;
         }
 
@@ -96,6 +91,23 @@ namespace EBank.Solutions.Primitives.Security
         /// <summary>
         /// Realiza a assinatura do link com JWT HS512 e retorna no parâmetro <paramref name="encodedParamenterName"/>=_SINGATURE_BASE64_HS512
         /// </summary>
+        /// <param name="publicKey">chave pública</param>
+        /// <param name="queryString">Parâmetros do link</param>
+        /// <param name="encodedParamenterName">Nome do parâmetro retornado na URL</param>
+        /// <param name="claims">Dados informativos para inserir junto a assinatura, pode ser usado após a decodificação do link</param>
+        /// <param name="issuer">Aquele que emitiu este link</param>
+        /// <param name="subject">Assunto/ sobre o que é o link</param>
+        /// <returns></returns>
+        public static string SignLink(string issuer,
+                                      string subject,
+                                      IEnumerable<(string Key, object Value)> claims,
+                                      string publicKey,
+                                      IEnumerable<(string Name, object Value)> queryString = null,
+                                      string encodedParamenterName = "code") => SignLink("", issuer, subject, claims, publicKey, queryString, encodedParamenterName).TrimStart('?');
+
+        /// <summary>
+        /// Realiza a assinatura do link com JWT HS512 e retorna no parâmetro <paramref name="encodedParamenterName"/>=_SINGATURE_BASE64_HS512
+        /// </summary>
         /// <param name="url">URL para assinatura, sem os parâmetros</param>
         /// <param name="publicKey">chave pública</param>
         /// <param name="queryString">Parâmetros do link</param>
@@ -105,12 +117,12 @@ namespace EBank.Solutions.Primitives.Security
         /// <param name="subject">Assunto/ sobre o que é o link</param>
         /// <returns></returns>
         public static string SignLink(string url,
-                           string issuer,
-                           string subject,
-                           IEnumerable<(string Key, object Value)> claims,
-                           string publicKey,
-                           IEnumerable<(string Name, object Value)> queryString = null,
-                           string encodedParamenterName = "code")
+                                      string issuer,
+                                      string subject,
+                                      IEnumerable<(string Key, object Value)> claims,
+                                      string publicKey,
+                                      IEnumerable<(string Name, object Value)> queryString = null,
+                                      string encodedParamenterName = "code")
         {
             var payload = new Dictionary<string, object>();
 

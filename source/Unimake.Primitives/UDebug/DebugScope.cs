@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Unimake.Debug
+namespace Unimake.Primitives.UDebug
 {
     /// <summary>
     /// Escopo para definição de configurações e dados entre classes, entidades e diferentes DLLs e serviços.

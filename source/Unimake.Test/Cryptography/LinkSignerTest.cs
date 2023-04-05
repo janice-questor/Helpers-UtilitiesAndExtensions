@@ -93,6 +93,19 @@ namespace EBank.Solutions.EBoleto.Test.PDF
         }
 
         [Fact]
+        public void SignLinkNoURL()
+        {
+            var link = LinkSigner.SignLink("unimake", "pdf", new (string Key, object Value)[]
+            {
+                ("pdfId", 123),
+                ("user", 550),
+                ("info", "Info teste"),
+            }, "Public_Key");
+            
+            DumpObject(link);
+        }
+
+        [Fact]
         public void SignLinkWithQueryString()
         {
             string key, link;
