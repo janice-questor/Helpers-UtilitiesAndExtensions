@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Threading;
+using Unimake.Cryptography.Enumerations;
+using Unimake.Cryptography.Exceptions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -26,39 +29,42 @@ namespace EBank.Solutions.EBoleto.Test.PDF
             DumpObject(decoded);
 
             //validar o link
-            decoded = LinkSigner.ValidedtAndGetValues(link, key);
+            decoded = LinkSigner.ValidateAndGetValues(link, key);
 
             DumpObject(decoded);
 
             Xunit.Assert.Throws<CryptographicException>(() =>
             {
                 key += "abc123";//só para invalidar a chave
-                LinkSigner.ValidedtAndGetValues(link, key);
+                LinkSigner.ValidateAndGetValues(link, key);
             });
 
             Xunit.Assert.Throws<CryptographicException>(() =>
             {
                 var parts = link.Split(new[] { '.' });
                 parts[1] += "abc123";//só para invalidar o header
-                LinkSigner.ValidedtAndGetValues(link, key);
+                LinkSigner.ValidateAndGetValues(link, key);
             });
 
             Xunit.Assert.Throws<CryptographicException>(() =>
             {
                 var parts = link.Split(new[] { '.' });
                 parts[2] += "abc123";//só para invalidar o payload
-                LinkSigner.ValidedtAndGetValues(link, key);
+                LinkSigner.ValidateAndGetValues(link, key);
             });
 
             Xunit.Assert.Throws<CryptographicException>(() =>
             {
                 var parts = link.Split(new[] { '.' });
                 parts[3] += "abc123";//só para invalidar o hash
-                LinkSigner.ValidedtAndGetValues(link, key);
+                LinkSigner.ValidateAndGetValues(link, key);
             });
         }
 
-        private static void BuidlLink(out string key, out string link, IEnumerable<(string Name, object Value)> queryString = null)
+        private static void BuidlLink(out string key,
+                                      out string link,
+                                      IEnumerable<(string Name, object Value)> queryString = null,
+                                      long? iat = null)
         {
             key = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
             var url = "https://example.com.br/Download/pdf";
@@ -68,7 +74,8 @@ namespace EBank.Solutions.EBoleto.Test.PDF
                 ("user", 550),
                 ("info", "Info teste"),
             }, key,
-            queryString);
+            queryString,
+            iat: iat);
         }
 
         private static void DumpObject(object obj) => testOutput.WriteLine(JsonConvert.SerializeObject(obj, Formatting.Indented));
@@ -101,7 +108,7 @@ namespace EBank.Solutions.EBoleto.Test.PDF
                 ("user", 550),
                 ("info", "Info teste"),
             }, "Public_Key");
-            
+
             DumpObject(link);
         }
 
@@ -117,6 +124,62 @@ namespace EBank.Solutions.EBoleto.Test.PDF
             });
             DumpObject(link);
             Assert(key, link);
+        }
+
+        [Theory]
+        [InlineData(ExpirationInterval.Seconds, 10)]
+        [InlineData(ExpirationInterval.Minutes, 10)]
+        [InlineData(ExpirationInterval.Hours, 10)]
+        [InlineData(ExpirationInterval.Days, 10)]
+        public void ValidateIatExpirationTest(ExpirationInterval expirationInterval, int interval)
+        {
+            //- interval para ter certeza que vai dar erro
+            var iat = LinkSigner.GetEpoch() - interval;
+            string key, link;
+            BuidlLink(out key, out link, new (string, object)[] {
+                ("param1", "value1"),
+                ("param2", "value2"),
+                ("param3", "value3"),
+                ("paramN", "valueN"),
+            }, iat);
+
+            DumpObject(link);
+
+            var decoded = LinkSigner.Decode(link, key, false);
+            Xunit.Assert.Throws<SecurityTokenExpiredException>(() => LinkSigner.ValidateIatExpiration(decoded, expirationInterval, 0));
+        }
+
+        [Fact]
+        public void ValidateIat30SecondsExpirationTest()
+        {
+            string key, link;
+            BuidlLink(out key, out link, new (string, object)[] {
+                ("param1", "value1"),
+                ("param2", "value2"),
+                ("param3", "value3"),
+                ("paramN", "valueN"),
+            });
+
+            DumpObject(link);
+
+            var seconds = 30;
+            var decoded = LinkSigner.Decode(link, key, false);
+            var start = DateTime.UtcNow.AddSeconds(seconds);
+            var elapsed = DateTime.UtcNow - start;
+
+            while(elapsed.TotalSeconds <= -1)
+            {
+                //não tem que dar erro
+                LinkSigner.ValidateIatExpiration(decoded, ExpirationInterval.Seconds, 30);
+                elapsed = DateTime.UtcNow - start;
+                System.Diagnostics.Trace.WriteLine(elapsed.ToString());         
+            }
+
+            //aguarda 5 segundos
+            Thread.Sleep(5000);
+
+            //aqui tem que dar erro
+            Xunit.Assert.Throws<SecurityTokenExpiredException>(() => LinkSigner.ValidateIatExpiration(decoded, ExpirationInterval.Seconds, seconds));
         }
 
         #endregion Public Methods

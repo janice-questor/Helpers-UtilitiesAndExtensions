@@ -6,7 +6,12 @@ using System.Linq;
 
 namespace Unimake.Primitives.Collections.Page
 {
-    public class PagedList<T>
+    // Não implementar IEnumerable<T>
+    // Como temos diversos construtores com IEnumerable<T> pode dar erro
+    // https://github.com/dotnet/runtime/issues/44428
+    // https://github.com/dotnet/runtime/issues/47422
+    // Para usar em foreach, basta implementar o método IEnumerator<T> GetEnumerator(), não é obrigatório vir da interface
+    public class PagedList<T> //: IEnumerable<T>
     {
         #region Public Properties
 
@@ -33,9 +38,14 @@ namespace Unimake.Primitives.Collections.Page
         #region Public Constructors
 
         [JsonConstructor]
+        public PagedList(T[] items, PageInfo pageInfo, RecordInfo recordInfo)
+            : this(items?.ToList(), pageInfo, recordInfo)
+        {
+        }
+
         public PagedList(IEnumerable<T> items, PageInfo pageInfo, RecordInfo recordInfo)
         {
-            Items = new ReadOnlyCollection<T>(items.ToList());
+            Items = new ReadOnlyCollection<T>((items ?? new T[0]).ToList());
             PageInfo = pageInfo;
             RecordInfo = recordInfo;
         }
@@ -79,10 +89,17 @@ namespace Unimake.Primitives.Collections.Page
         public PagedList(IEnumerable<T> items, long recordCount, PageInfo pageInfo)
         {
             PageInfo = pageInfo ?? throw new ArgumentNullException(nameof(pageInfo));
-            Items = new ReadOnlyCollection<T>(items?.ToList() ?? new List<T>());
+            Items = new ReadOnlyCollection<T>((items ?? new T[0]).ToList());
             RecordInfo = new RecordInfo(recordCount, PageInfo);
         }
 
         #endregion Public Constructors
+
+        #region Public Methods
+
+        /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
+        public IEnumerator<T> GetEnumerator() => Items.GetEnumerator();
+
+        #endregion Public Methods
     }
 }
