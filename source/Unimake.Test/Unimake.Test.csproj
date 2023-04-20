@@ -21,9 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Assets\Files\" />
     <Folder Include="Extensions\" />
     <Folder Include="Cryptography\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +31,15 @@
     <ProjectReference Include="..\Unimake.Extensions\Unimake.Extensions.csproj" />
     <ProjectReference Include="..\Unimake.Primitives\Unimake.Primitives.csproj" />
     <ProjectReference Include="..\Unimake.Utils\Unimake.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\Files\PDFFile.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Files\TXTFile.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
