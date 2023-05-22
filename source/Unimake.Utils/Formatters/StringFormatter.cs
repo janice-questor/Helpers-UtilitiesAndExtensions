@@ -3,8 +3,16 @@ using System.ComponentModel;
 
 namespace Unimake.Formatters
 {
-    public class StringFormatter
+    public abstract class StringFormatter
     {
+        #region Private Constructors
+
+        private StringFormatter()
+        {
+        }
+
+        #endregion Private Constructors
+
         #region Public Methods
 
         /// <summary>

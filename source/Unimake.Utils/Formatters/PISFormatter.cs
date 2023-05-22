@@ -1,7 +1,15 @@
 ﻿namespace Unimake.Formatters
 {
-    public static class PISFormatter
+    public abstract class PISFormatter
     {
+        #region Private Constructors
+
+        private PISFormatter()
+        {
+        }
+
+        #endregion Private Constructors
+
         #region Public Methods
 
         /// <summary>

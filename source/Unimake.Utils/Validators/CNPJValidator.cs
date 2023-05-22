@@ -3,8 +3,16 @@ using System.Text.RegularExpressions;
 
 namespace Unimake.Validators
 {
-    public static class CNPJValidator
+    public abstract class CNPJValidator
     {
+        #region Private Constructors
+
+        private CNPJValidator()
+        {
+        }
+
+        #endregion Private Constructors
+
         #region Private Methods
 
         private static bool Validate(string cnpj)

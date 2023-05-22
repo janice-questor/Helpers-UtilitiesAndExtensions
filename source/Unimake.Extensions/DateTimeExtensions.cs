@@ -190,6 +190,18 @@ namespace System
         }
 
         /// <summary>
+        /// Converte um valor Unix epoch time para <see cref="DateTime"/>
+        /// </summary>
+        /// <param name="unixTimeStamp">Unix <see cref="DateTime"/> em segundos</param>
+        /// <returns></returns>
+        public static DateTime UnixTimeStampToDateTime(long unixTimeStamp)
+        {
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dateTime;
+        }
+
+        /// <summary>
         /// Calcula a semana da data informada
         /// </summary>
         /// <param name="dataTime">Data que é para calcular a semana</param>

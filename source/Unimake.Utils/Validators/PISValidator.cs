@@ -3,8 +3,16 @@ using System.Text.RegularExpressions;
 
 namespace Unimake.Validators
 {
-    public static class PISValidator
+    public abstract class PISValidator
     {
+        #region Private Constructors
+
+        private PISValidator()
+        {
+        }
+
+        #endregion Private Constructors
+
         #region Private Methods
 
         private static bool Validate(string pis)

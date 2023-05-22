@@ -1,7 +1,15 @@
 ﻿namespace Unimake.Formatters
 {
-    public static class CNPJFormatter
+    public abstract class CNPJFormatter
     {
+        #region Private Constructors
+
+        private CNPJFormatter()
+        {
+        }
+
+        #endregion Private Constructors
+
         #region Public Methods
 
         /// <summary>

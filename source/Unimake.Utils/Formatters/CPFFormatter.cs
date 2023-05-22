@@ -1,7 +1,15 @@
 ﻿namespace Unimake.Formatters
 {
-    public static class CPFFormatter
+    public abstract class CPFFormatter
     {
+        #region Private Constructors
+
+        private CPFFormatter()
+        {
+        }
+
+        #endregion Private Constructors
+
         #region Public Methods
 
         /// <summary>

@@ -3,8 +3,15 @@ using System.Text.RegularExpressions;
 
 namespace Unimake.Validators
 {
-    public static class CPFValidator
+    public abstract class CPFValidator
     {
+        #region Private Constructors
+
+        private CPFValidator()
+        { }
+
+        #endregion Private Constructors
+
         #region Private Methods
 
         private static bool Validate(string cpf)
