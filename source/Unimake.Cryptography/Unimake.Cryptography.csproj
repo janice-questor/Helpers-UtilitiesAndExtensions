@@ -8,8 +8,8 @@
 		<PackageProjectUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</RepositoryUrl>
 		<PackageTags>unimake;Utils;helpers;utilities</PackageTags>
-		<AssemblyVersion>2023.06.13.0918</AssemblyVersion>
-		<Version>20230613.0918.02</Version>
+		<AssemblyVersion>2023.07.03.1027</AssemblyVersion>
+		<Version>20230703.1027.02</Version>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<Authors>Unimake Software</Authors>
 		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
