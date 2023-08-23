@@ -24,15 +24,30 @@ namespace Unimake.Net
 
         #region Private Methods
 
-        private static bool HasInternetConnection(HttpWebRequest client)
+        /// <summary>
+        /// Verifica se existe conexão com internet
+        /// </summary>
+        /// <param name="client">Cliente usado para verificação </param>
+        /// <param name="timeoutInSeconds">Tempo de espera para resposta</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        private static bool HasInternetConnection(HttpWebRequest client, int timeoutInSeconds = 3)
         {
             if(client is null)
             {
                 throw new ArgumentNullException(nameof(client));
             }
 
+            if(timeoutInSeconds <= 0)
+            {
+                throw new ArgumentOutOfRangeException($"O valor  do parâmetro '{nameof(timeoutInSeconds)}' deve ser maior que zero.");
+            }
+
             try
             {
+                timeoutInSeconds *= 1000;
+                client.Timeout = timeoutInSeconds;
+                client.ReadWriteTimeout = timeoutInSeconds;
                 var response = client.GetResponse() as HttpWebResponse;
                 return response.StatusCode == HttpStatusCode.NoContent;
             }
@@ -78,10 +93,11 @@ namespace Unimake.Net
         /// <summary>
         /// Verifica a conexão com a internet e retorna verdadeiro se conectado com sucesso
         /// </summary>
+        /// <param name="timeoutInSeconds">Tempo de espera para resposta</param>
         /// <param name="proxy"></param>
         /// <returns></returns>
 
-        public static bool HasInternetConnection(IWebProxy proxy)
+        public static bool HasInternetConnection(IWebProxy proxy, int timeoutInSeconds = 3)
         {
             var client = WebRequest.Create(InternetURL) as HttpWebRequest;
 
@@ -92,7 +108,7 @@ namespace Unimake.Net
 
             try
             {
-                return HasInternetConnection(client);
+                return HasInternetConnection(client, timeoutInSeconds);
             }
             catch
             {
@@ -104,10 +120,8 @@ namespace Unimake.Net
         /// Verifica a conexão com a internet e retorna verdadeiro se conectado com sucesso
         /// </summary>
         /// <returns></returns>
-        public static bool HasInternetConnection()
-        {
-            return HasInternetConnection(WebRequest.Create(InternetURL) as HttpWebRequest);
-        }
+        /// <param name="timeoutInSeconds">Tempo de espera para resposta</param>
+        public static bool HasInternetConnection(int timeoutInSeconds = 3) => HasInternetConnection(WebRequest.Create(InternetURL) as HttpWebRequest, timeoutInSeconds);
 
         /// <summary>
         /// Verifica se a URL é alcançável.
