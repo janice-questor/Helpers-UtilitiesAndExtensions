@@ -29,10 +29,8 @@ namespace EBank.Solutions.Primitives.Security
         private static string EnsureURL(string url, IEnumerable<(string Name, object Value)> queryString)
         {
             url = url.TrimEnd('/');
-#pragma warning disable SYSLIB0013 // Type or member is obsolete
             //O novo método sugerido dá erro ao validar a URL
             url = Uri.EscapeUriString(url + NameValueToQueryString(queryString));
-#pragma warning restore SYSLIB0013 // Type or member is obsolete
             return url;
         }
 

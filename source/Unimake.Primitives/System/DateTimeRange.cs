@@ -1,6 +1,4 @@
-﻿#pragma warning disable IDE0130 //Namespace 'Foo' does not match folder structure, expected 'Foo'
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace System
 {
@@ -137,5 +135,3 @@ namespace System
         #endregion Public Methods
     }
 }
-
-#pragma warning restore IDE0130 //Namespace 'Foo' does not match folder structure, expected 'Foo'

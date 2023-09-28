@@ -18,6 +18,16 @@ namespace System
         public static TimeSpan DateDiff(this DateTime value, DateTime date) => value.Subtract(date);
 
         /// <summary>
+        /// Retorna a data e toma como base a última hora do dia
+        /// </summary>
+        /// <param name="date">Data</param>
+        /// <returns></returns>
+        public static DateTime EndOfDay(this DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, 23, 59, 59);
+        }
+
+        /// <summary>
         /// Calcula o primeiro dia do mês da data informada
         /// </summary>
         /// <param name="dateTime">Data</param>
@@ -30,7 +40,6 @@ namespace System
         /// </summary>
         /// <param name="date">Não é utilizado para nada, somente para atender a extension</param>
         /// <returns>Primeiro dia da semana de acordo com a cultura</returns>
-        [Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "O parâmetro é usado apenas para extender o tipo")]
         public static DayOfWeek FirstDayOfWeek(this DateTime date) => CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
 
         /// <summary>
@@ -187,6 +196,16 @@ namespace System
             }
 
             return new DateTime(year, month, 1).AddMonths(1).AddDays(-1);
+        }
+
+        /// <summary>
+        /// Retorna a data e toma como base a primeira hora do dia
+        /// </summary>
+        /// <param name="date">Data</param>
+        /// <returns></returns>
+        public static DateTime StartOfDay(this DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
         }
 
         /// <summary>

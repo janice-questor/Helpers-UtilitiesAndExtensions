@@ -1,6 +1,4 @@
-﻿#pragma warning disable IDE0130 //Namespace 'Foo' does not match folder structure, expected 'Foo'
-
-using System.Linq;
+﻿using System.Linq;
 using Unimake.Primitives.Collections.Page;
 
 namespace System.Collections.Generic
@@ -56,5 +54,3 @@ namespace System.Collections.Generic
         #endregion Public Methods
     }
 }
-
-#pragma warning restore IDE0130 //Namespace 'Foo' does not match folder structure, expected 'Foo'
