@@ -1,18 +1,21 @@
-﻿namespace Unimake.Primitives.Enumerations
+﻿using System.ComponentModel;
+
+namespace Unimake.Primitives.Enumerations
 {
     /// <summary>
     /// Define o tipo de concessão que deverá ser realizada
     /// </summary>
-    public enum GrantType
+    [DefaultValue(GrantType.ClientCredentials)]
+    public enum GrantType : short
     {
         /// <summary>
         /// Concessão por usuário e senha
         /// </summary>
-        Password,
+        Password = 0,
 
         /// <summary>
-        /// Concessão por ClientId e Secret
+        /// Concessão por ClientId ou AppId ou Secret
         /// </summary>
-        ClientCredentials
+        ClientCredentials = 1
     }
 }
