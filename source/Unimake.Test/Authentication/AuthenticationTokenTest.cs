@@ -30,6 +30,30 @@ namespace Unimake.Helpers_UtilitiesAndExtensions.Test.Authentication
         }
 
         [Fact]
+        public void ConvertFrom_Newtonsoft_Json()
+        {
+            var json = "{\"grantType\":\"Password\",\"appId\":\"user@test.com\",\"secret\":\"123456\"}";
+            var token = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthenticationToken>(json);
+            Assert.NotNull(token);
+
+            json = "{\"grantType\":\"0\",\"appId\":\"user@test.com\",\"secret\":\"123456\"}";
+            token = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthenticationToken>(json);
+            Assert.NotNull(token);
+        }
+
+        [Fact]
+        public void ConvertFrom_System_Text_Json()
+        {
+            var json = "{\"grantType\":\"Password\",\"appId\":\"user@test.com\",\"secret\":\"123456\"}";
+            var token = System.Text.Json.JsonSerializer.Deserialize<AuthenticationToken>(json);
+            Assert.NotNull(token);
+
+            json = "{\"grantType\":\"0\",\"appId\":\"user@test.com\",\"secret\":\"123456\"}";
+            token = System.Text.Json.JsonSerializer.Deserialize<AuthenticationToken>(json);
+            Assert.NotNull(token);
+        }
+
+        [Fact]
         public void Username_And_Passsword_ArgumentException() =>
             Assert.Throws<ArgumentException>(() => new AuthenticationToken(Primitives.Enumerations.GrantType.Password).Validate());
 
