@@ -1,10 +1,18 @@
-﻿using Xunit;
+﻿using System;
+using Unimake.Net;
+using Xunit;
 
 namespace Unimake.Helpers_UtilitiesAndExtensions.Test.Net
 {
     public class UtilityTest
     {
         #region Public Methods
+
+        [Fact]
+        public void GetLocalIPV4Address() => Console.WriteLine(Utility.GetLocalIPAddress());
+
+        [Fact]
+        public void GetLocalIPV6Address() => Console.WriteLine(Utility.GetLocalIPAddress(true));
 
         [Theory]
         [InlineData(01)]

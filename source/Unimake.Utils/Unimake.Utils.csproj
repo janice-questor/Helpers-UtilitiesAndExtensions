@@ -9,8 +9,8 @@
 		<PackageProjectUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</RepositoryUrl>
 		<PackageTags>unimake;Utils;helpers;utilities</PackageTags>
-		<AssemblyVersion>2023.10.17.1052</AssemblyVersion>
-		<Version>20231017.1052.45</Version>
+		<AssemblyVersion>2023.11.03.1515</AssemblyVersion>
+		<Version>20231103.1515.15</Version>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Substring(0,7))</RootNamespace>
 		<Description>Utilitários, Helpers, Formatters, Validadores.</Description>

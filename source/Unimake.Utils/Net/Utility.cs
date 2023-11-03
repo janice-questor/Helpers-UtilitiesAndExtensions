@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 
 namespace Unimake.Net
 {
@@ -23,6 +25,42 @@ namespace Unimake.Net
         #endregion Private Constructors
 
         #region Private Methods
+
+        private static string GetLocalIPV4Address(bool ignoreLoopback = true)
+        {
+            var addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList
+                               .Where(w => w.AddressFamily == AddressFamily.InterNetwork);
+
+            foreach(var ip in addresses)
+            {
+                if(ignoreLoopback && IPAddress.IsLoopback(ip))
+                {
+                    continue;
+                }
+
+                return ip.ToString();
+            }
+
+            return null;
+        }
+
+        private static string GetLocalIPV6Address(bool ignoreLoopback = true)
+        {
+            var addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList
+                               .Where(w => w.AddressFamily == AddressFamily.InterNetworkV6);
+
+            foreach(var ip in addresses)
+            {
+                if(ignoreLoopback && IPAddress.IsLoopback(ip))
+                {
+                    continue;
+                }
+
+                return ip.ToString();
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Verifica se existe conexão com internet
@@ -60,6 +98,18 @@ namespace Unimake.Net
         #endregion Private Methods
 
         #region Public Methods
+
+        /// <summary>
+        /// Retorna o número de IP local.
+        /// </summary>
+        /// <param name="returnIPV6">Se verdadeiro, retorna o IPV6 ao invés do IPV4</param>
+        /// <param name="ignoreLoopback">Ignora o IP ::1 ou 127.0.0.1</param>
+        /// <param name="returnErrorIfNotFound">Se verdadeiro, retorna erro se não for encontrado o IP</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">Se <paramref name="returnErrorIfNotFound"/> for verdadeiro, é lançado um erro ao não encontrar um IP</exception>
+        public static string GetLocalIPAddress(bool returnIPV6 = false, bool ignoreLoopback = true, bool returnErrorIfNotFound = true) =>
+            (returnIPV6 ? GetLocalIPV6Address() : GetLocalIPV4Address()) ??
+                (returnErrorIfNotFound ? throw new Exception($"No network adapters with an {(returnIPV6 ? "IPv6" : "IPv4")} address in the system!") : "");
 
         /// <summary>
         /// Cria um novo objeto de proxy com base nos parâmetros passados
