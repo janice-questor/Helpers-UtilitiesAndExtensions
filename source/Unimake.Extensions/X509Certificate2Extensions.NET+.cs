@@ -81,7 +81,10 @@ namespace System.Security.Cryptography.X509Certificates
             switch(cert.GetKeyAlgorithm())
             {
                 case "1.2.840.113549.1.1.1":
-                    rsa = RSA.Create();
+                    var cspParams = new CspParameters();
+                    cspParams.KeyContainerName = cert.Thumbprint;
+                    cspParams.Flags = CspProviderFlags.UseMachineKeyStore;
+                    rsa = new RSACryptoServiceProvider(cspParams);
                     break;
 
                 case "1.2.840.10045.2.1":
