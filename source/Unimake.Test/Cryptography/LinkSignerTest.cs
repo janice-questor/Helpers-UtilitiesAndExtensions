@@ -93,8 +93,7 @@ namespace EBank.Solutions.EBoleto.Test.PDF
         [Fact]
         public void SignLinkNoQueryString()
         {
-            string key, link;
-            BuidlLink(out key, out link);
+            BuidlLink(out var key, out var link);
             DumpObject(link);
             Assert(key, link);
         }
@@ -115,8 +114,7 @@ namespace EBank.Solutions.EBoleto.Test.PDF
         [Fact]
         public void SignLinkWithQueryString()
         {
-            string key, link;
-            BuidlLink(out key, out link, new (string, object)[] {
+            BuidlLink(out var key, out var link, new (string, object)[] {
                 ("param1", "value1"),
                 ("param2", "value2"),
                 ("param3", "value3"),
@@ -135,8 +133,7 @@ namespace EBank.Solutions.EBoleto.Test.PDF
         {
             //- interval para ter certeza que vai dar erro
             var iat = LinkSigner.GetEpoch() - interval;
-            string key, link;
-            BuidlLink(out key, out link, new (string, object)[] {
+            BuidlLink(out var key, out var link, new (string, object)[] {
                 ("param1", "value1"),
                 ("param2", "value2"),
                 ("param3", "value3"),
@@ -152,8 +149,7 @@ namespace EBank.Solutions.EBoleto.Test.PDF
         [Fact]
         public void ValidateIat30SecondsExpirationTest()
         {
-            string key, link;
-            BuidlLink(out key, out link, new (string, object)[] {
+            BuidlLink(out var key, out var link, new (string, object)[] {
                 ("param1", "value1"),
                 ("param2", "value2"),
                 ("param3", "value3"),
@@ -172,7 +168,7 @@ namespace EBank.Solutions.EBoleto.Test.PDF
                 //não tem que dar erro
                 LinkSigner.ValidateIatExpiration(decoded, ExpirationInterval.Seconds, 30);
                 elapsed = DateTime.UtcNow - start;
-                System.Diagnostics.Trace.WriteLine(elapsed.ToString());         
+                System.Diagnostics.Trace.WriteLine(elapsed.ToString());
             }
 
             //aguarda 5 segundos

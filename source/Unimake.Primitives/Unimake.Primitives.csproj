@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net5.0;net6.0;net7.0</TargetFrameworks>
+		<TargetFramework>netstandard2.0</TargetFramework>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Company>Unimake Software</Company>
 		<Authors>Unimake Software</Authors>
@@ -9,8 +9,8 @@
 		<PackageProjectUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</RepositoryUrl>
 		<PackageTags>unimake;Utils;helpers;utilities</PackageTags>
-		<AssemblyVersion>2024.02.28.1132</AssemblyVersion>
-		<Version>20240228.1132.09</Version>
+		<AssemblyVersion>2024.04.16.0118</AssemblyVersion>
+		<Version>20240416.0118.07</Version>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<Description>Utilitários, Helpers, Formatters, Validadores.</Description>

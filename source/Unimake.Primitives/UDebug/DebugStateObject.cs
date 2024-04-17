@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Unimake.Primitives.UDebug
+﻿namespace Unimake.Primitives.UDebug
 {
     /// <summary>
     /// Objeto de estado de debug

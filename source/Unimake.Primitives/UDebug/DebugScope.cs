@@ -32,8 +32,7 @@ namespace Unimake.Primitives.UDebug
         /// Instancia um novo escopo
         /// </summary>
         /// <param name="objectState"></param>
-        /// <param name="singleInstance"></param>
-        public DebugScope(TObjectState objectState, bool singleInstance = true)
+        public DebugScope(TObjectState objectState)
         {
             ObjectState = objectState;
             Instance = this;

@@ -40,7 +40,9 @@ namespace System
         /// </summary>
         /// <param name="date">Não é utilizado para nada, somente para atender a extension</param>
         /// <returns>Primeiro dia da semana de acordo com a cultura</returns>
+#pragma warning disable IDE0060 // Remove unused parameter
         public static DayOfWeek FirstDayOfWeek(this DateTime date) => CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
+#pragma warning restore IDE0060 // Remove unused parameter
 
         /// <summary>
         /// Retorna o dia do mês do primeiro dia da semana de uma data especificada

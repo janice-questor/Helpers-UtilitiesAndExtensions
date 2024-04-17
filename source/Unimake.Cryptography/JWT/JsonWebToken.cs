@@ -20,7 +20,7 @@ namespace Unimake.Cryptography.JWT
     {
         #region Private Fields
 
-        private static Func<byte[], byte[], byte[]> hashAlgorithm;
+        private static readonly Func<byte[], byte[], byte[]> hashAlgorithm;
 
         #endregion Private Fields
 

@@ -13,7 +13,7 @@ namespace Unimake.Primitives.CommonTypes
     {
         #region Private Fields
 
-        private string value;
+        private readonly string value;
 
         #endregion Private Fields
 

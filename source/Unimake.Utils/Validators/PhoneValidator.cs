@@ -21,7 +21,7 @@ namespace Unimake.Validators
         /// <param name="allowEmpty">Se verdadeiro, permite que seja informado um valor vazio</param>
         /// <param name="minLength">Tamanho mínimo do número de telefone, o padrão é 8 números</param>
         /// <returns>Verdadeiro se satisfaz as condições de validação. Caso contrário, falso.</returns>
-        public static bool Validate(string phoneNumber, bool allowEmpty = true, Int16 minLength = 8)
+        public static bool Validate(string phoneNumber, bool allowEmpty = true, short minLength = 8)
         {
             phoneNumber = UConvert.OnlyNumbers(phoneNumber, ".-", false).ToString();
 

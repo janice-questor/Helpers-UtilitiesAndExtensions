@@ -42,7 +42,7 @@ namespace System.Collections.Generic
             }
         }
 
-        public static bool IsNullOrEmpty<TObject>(this IEnumerable<TObject> enumerable) => !(enumerable?.Any() ?? false);
+        public static bool IsNullOrEmpty<TObject>(this IEnumerable<TObject> enumerable) => enumerable == null || !enumerable.Any();
 
         /// <summary>
         /// Verifica se o array é vazio
@@ -63,7 +63,7 @@ namespace System.Collections.Generic
         /// </summary>
         /// <param name="values">Lista informada;</param>
         /// <returns></returns>
-        public static bool IsNullOrEmpty(this IEnumerable values) => values == null || values.Cast<object>().Count() == 0;
+        public static bool IsNullOrEmpty(this IEnumerable values) => values == null || !values.Cast<object>().Any();
 
         /// <summary>
         /// Concatena os valores e utiliza a vírgula como separador.

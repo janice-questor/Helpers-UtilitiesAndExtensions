@@ -699,9 +699,9 @@ namespace Unimake.Primitives.Parser.Barcode
             public override string ToString() => string.Format("{0} [{1}]", AI, Description);
         }
 
-        private static SortedList<string, AII> aiiDict = new SortedList<string, AII>();
-        private static int minLengthOfAI = 1;
-        private static int maxLengthOfAI = 4;
+        private static readonly SortedList<string, AII> aiiDict = new SortedList<string, AII>();
+        private static readonly int minLengthOfAI = 1;
+        private static readonly int maxLengthOfAI = 4;
         private static char groutSeperator = (char)29;
         private static string ean128StartCode = "]C1";
         private static bool hasCheckSum = false;

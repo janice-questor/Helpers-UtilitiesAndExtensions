@@ -55,6 +55,7 @@ namespace Unimake.Primitives.Collections.Page
         {
             PageSize = pageSize;
             RecordCount = recordCount;
+            _ = pageCount;
         }
 
         #endregion Public Constructors

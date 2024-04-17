@@ -11,8 +11,8 @@ namespace Unimake.Helpers_UtilitiesAndExtensions.Test.Types
     {
         #region Public Fields
 
-        public QueryString DummyData = new QueryString
-            {
+        public QueryString DummyData = new()
+        {
                 { "key0", "value"},
                 { "key1", 10},
                 { "key2", 12m},
@@ -216,7 +216,7 @@ namespace Unimake.Helpers_UtilitiesAndExtensions.Test.Types
             Assert.True(DummyData != null);
             Assert.True(DummyData != default(QueryString));
             Assert.True(DummyData != default);
-                   
+
             Assert.True(null != DummyData);
             Assert.True(default(QueryString) != DummyData);
             Assert.True(default != DummyData);

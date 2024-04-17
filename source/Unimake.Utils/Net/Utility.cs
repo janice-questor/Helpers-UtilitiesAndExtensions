@@ -108,7 +108,7 @@ namespace Unimake.Net
         /// <returns></returns>
         /// <exception cref="Exception">Se <paramref name="returnErrorIfNotFound"/> for verdadeiro, é lançado um erro ao não encontrar um IP</exception>
         public static string GetLocalIPAddress(bool returnIPV6 = false, bool ignoreLoopback = true, bool returnErrorIfNotFound = true) =>
-            (returnIPV6 ? GetLocalIPV6Address() : GetLocalIPV4Address()) ??
+            (returnIPV6 ? GetLocalIPV6Address(ignoreLoopback) : GetLocalIPV4Address(ignoreLoopback)) ??
                 (returnErrorIfNotFound ? throw new Exception($"No network adapters with an {(returnIPV6 ? "IPv6" : "IPv4")} address in the system!") : "");
 
         /// <summary>
@@ -126,6 +126,10 @@ namespace Unimake.Net
                                          int port,
                                          bool autoDetect = false)
         {
+            //Discards ...
+            _ = server;
+            _ = port;
+            
             var proxy = autoDetect ? WebRequest.GetSystemWebProxy() : WebRequest.DefaultWebProxy;
 
             if(proxy == null)
@@ -133,8 +137,8 @@ namespace Unimake.Net
                 return default;
             }
 
-            if(!String.IsNullOrEmpty(user) &&
-               !String.IsNullOrEmpty(password))
+            if(!string.IsNullOrEmpty(user) &&
+               !string.IsNullOrEmpty(password))
                 proxy.Credentials = new NetworkCredential(user, password);
 
             return proxy;

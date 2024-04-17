@@ -13,7 +13,7 @@ namespace System.Http
     {
         #region Private Fields
 
-        private Dictionary<string, object> values = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> values = new Dictionary<string, object>();
 
         #endregion Private Fields
 
