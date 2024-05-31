@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
 namespace Unimake.Net
@@ -152,11 +153,17 @@ namespace Unimake.Net
             {
                 testUrls = new string[] {
                     "http://clients3.google.com/generate_204",
+                    "8.8.8.8", //Servidor Primário de DNS do Google
+                    "8.8.4.4", //Servidor Secundário de DNS do Google
                     "http://www.microsoft.com",
                     "http://www.cloudflare.com",
+                    "1.1.1.1", //Servidor Primário de DNS do Cloudfare
+                    "1.0.0.1",  //Servidor Secundário de DNS do Cloudfare
                     "http://www.amazon.com",
-                    "http://www.uol.com.br",
-                    "http://www.unimake.com.br"
+                    "9.9.9.9", //Servidor Primário de DNS do Quad 9
+                    "149.112.112.112", //Servidor Secundário de DNS do Quad 9
+                    "http://www.unimake.com.br",
+                    "http://67.205.183.164"
                 };
             }
 
@@ -165,20 +172,27 @@ namespace Unimake.Net
 
             foreach (var url in testUrls)
             {
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                if (url.Substring(0, 7).Equals("http://"))
+                {
+                    var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                    if (proxy != null)
+                    {
+                        httpWebRequest.Proxy = proxy;
+                    }
 
-                if (proxy != null)
-                {
-                    httpWebRequest.Proxy = proxy;
+                    try
+                    {
+                        retorno = HasInternetConnection(httpWebRequest, timeoutMilleSeconds);
+                    }
+                    catch
+                    {
+                        retorno = false;
+                    }
                 }
-
-                try
+                else
                 {
-                    retorno = HasInternetConnection(httpWebRequest, timeoutMilleSeconds);
-                }
-                catch
-                {
-                    retorno = false;
+                    // Testar conexão com IP direto do Google
+                    retorno = TestConnectionToIp(url, timeoutInSeconds);
                 }
 
                 if (retorno)
@@ -188,6 +202,27 @@ namespace Unimake.Net
             }
 
             return retorno;
+        }
+
+        /// <summary>
+        /// Testar a INTERNET a partir de um PING em servidores mundiais de DNS
+        /// </summary>
+        /// <param name="ipAddress">IP a ser testado</param>
+        /// <param name="timeoutInSeconds">Tempo máximo para obter uma resposta</param>
+        /// <returns>Se teve sucesso no PING</returns>
+        private static bool TestConnectionToIp(string ipAddress, int timeoutInSeconds)
+        {
+            try
+            {
+                Ping ping = new Ping();
+                PingReply reply = ping.Send(ipAddress, timeoutInSeconds * 1000);
+
+                return (reply.Status == IPStatus.Success);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
