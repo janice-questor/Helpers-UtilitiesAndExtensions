@@ -172,9 +172,7 @@ namespace Unimake.Net
                     "1.0.0.1",  //Servidor Secundário de DNS do Cloudfare
                     "http://www.amazon.com",
                     "9.9.9.9", //Servidor Primário de DNS do Quad 9
-                    "149.112.112.112", //Servidor Secundário de DNS do Quad 9
-                    "http://www.unimake.com.br",
-                    "http://67.205.183.164"
+                    "149.112.112.112" //Servidor Secundário de DNS do Quad 9
                 };
             }
 
