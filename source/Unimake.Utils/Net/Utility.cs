@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Unimake.Net
 {
@@ -58,31 +59,35 @@ namespace Unimake.Net
         }
 
         /// <summary>
-        /// Verifica se existe conexão com internet
+        /// Testar conexão HTTP ou HTTPS
         /// </summary>
-        /// <param name="client">Cliente usado para verificação </param>
-        /// <param name="timeoutMilleSeconds">Tempo de espera para resposta (Default=3000, ou seja, 3 segundos)</param>
-        /// <returns>true = Tem conexão com a internet</returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        private static bool HasInternetConnection(HttpWebRequest client, int timeoutMilleSeconds = 3000)
+        /// <param name="url">URL a ser testada</param>
+        /// <param name="certificate">Certificado a ser utilizado para conexões https</param>
+        /// <param name="proxy">Configuração de proxy, caso exista</param>
+        /// <param name="method">GET ou POST (Tem URLs que deve ser testado através do GET, outras o POST)</param>
+        /// <returns>Se a URL está respondendo, ou não</returns>
+        public static bool TestHttpConnection(string url, X509Certificate2 certificate = null, int timeoutInSeconds = 3, IWebProxy proxy = null, string method = "GET")
         {
-            if (client is null)
-            {
-                throw new ArgumentNullException(nameof(client));
-            }
-
-            if (timeoutMilleSeconds <= 0)
-            {
-                throw new ArgumentOutOfRangeException($"O valor  do parâmetro '{nameof(timeoutMilleSeconds)}' deve ser maior que zero.");
-            }
-
             try
             {
-                client.Timeout = timeoutMilleSeconds;
-                client.ReadWriteTimeout = timeoutMilleSeconds;
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
 
-                var statusCode = (client.GetResponse() as HttpWebResponse).StatusCode;
+                if (proxy != null)
+                {
+                    httpWebRequest.Proxy = proxy;
+                }
 
+                httpWebRequest.Method = method;
+
+                if (certificate != null)
+                {
+                    httpWebRequest.ClientCertificates.Add(certificate);
+                }
+
+                httpWebRequest.Timeout = timeoutInSeconds * 1000;
+                httpWebRequest.ReadWriteTimeout = timeoutInSeconds * 1000;
+
+                var statusCode = (httpWebRequest.GetResponse() as HttpWebResponse).StatusCode;
                 return statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.NoContent;
             }
             catch
@@ -140,15 +145,21 @@ namespace Unimake.Net
             return proxy;
         }
 
+
         /// <summary>
         /// Verifica a conexão com a internet e retorna verdadeiro se conectado com sucesso
         /// </summary>
-        /// <param name="timeoutInSeconds">Tempo de espera para resposta</param>
         /// <param name="proxy">Proxy a ser utilizado para testar a conexão</param>
         /// <param name="timeoutInSeconds">Tempo para tentativa de conexão em segundos</param>
+        /// <param name="testUrls">URLs a serem testadas, se não informada o método utilizará 5 URLs para o teste, se uma delas funcionar, vai retornar que a conexão está ok</param>
         /// <returns>true = Tem conexão com a internet</returns>
         public static bool HasInternetConnection(IWebProxy proxy, int timeoutInSeconds = 3, string[] testUrls = null)
         {
+            if (timeoutInSeconds <= 0)
+            {
+                throw new ArgumentOutOfRangeException("O valor  do parâmetro 'timeoutInSeconds' deve ser maior que zero.");
+            }
+
             if (testUrls == null)
             {
                 testUrls = new string[] {
@@ -174,15 +185,9 @@ namespace Unimake.Net
             {
                 if (url.Substring(0, 7).Equals("http://"))
                 {
-                    var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-                    if (proxy != null)
-                    {
-                        httpWebRequest.Proxy = proxy;
-                    }
-
                     try
                     {
-                        retorno = HasInternetConnection(httpWebRequest, timeoutMilleSeconds);
+                        retorno = TestHttpConnection(url, null, timeoutInSeconds, proxy);
                     }
                     catch
                     {
@@ -192,7 +197,7 @@ namespace Unimake.Net
                 else
                 {
                     // Testar conexão com IP direto do Google
-                    retorno = TestConnectionToIp(url, timeoutInSeconds);
+                    retorno = PingHost(url, timeoutInSeconds);
                 }
 
                 if (retorno)
@@ -205,21 +210,20 @@ namespace Unimake.Net
         }
 
         /// <summary>
-        /// Testar a INTERNET a partir de um PING em servidores mundiais de DNS
+        /// Executa PING no HOST informado
         /// </summary>
-        /// <param name="ipAddress">IP a ser testado</param>
-        /// <param name="timeoutInSeconds">Tempo máximo para obter uma resposta</param>
+        /// <param name="ipAddress">HOST (IP ou DNS)</param>
+        /// <param name="timeoutInSeconds">Tempo máximo para ter uma resposta (timeout)</param>
         /// <returns>Se teve sucesso no PING</returns>
-        private static bool TestConnectionToIp(string ipAddress, int timeoutInSeconds)
+        public static bool PingHost(string ipAddress, int timeoutInSeconds)
         {
             try
             {
-                Ping ping = new Ping();
-                PingReply reply = ping.Send(ipAddress, timeoutInSeconds * 1000);
-
+                var ping = new Ping();
+                var reply = ping.Send(ipAddress, timeoutInSeconds * 1000);
                 return (reply.Status == IPStatus.Success);
             }
-            catch
+            catch (PingException)
             {
                 return false;
             }
