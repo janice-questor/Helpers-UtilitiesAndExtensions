@@ -33,15 +33,22 @@ namespace Unimake.Cryptography
             var asciiBytes = asciiEncoding.GetBytes(value);
 
             // Gerar o HASH (array de bytes) utilizando SHA1
-            var sha1 = new SHA1CryptoServiceProvider();
-            var sha1Hash = sha1.ComputeHash(asciiBytes);
+            using (var sha1 = SHA1.Create())
+            {
+                var sha1Hash = sha1.ComputeHash(asciiBytes);
 
-            // Assinar o HASH (array de bytes) utilizando RSA-SHA1.
-            var rsa = certificado.PrivateKey as RSACryptoServiceProvider;
-            asciiBytes = rsa.SignHash(sha1Hash, "SHA1");
-            var result = Convert.ToBase64String(asciiBytes);
+                using (var rsa = certificado.GetRSAPrivateKey())
+                {
+                    if (rsa == null)
+                    {
+                        throw new InvalidOperationException("Chave privada RSA não encontrada no certificado.");
+                    }
 
-            return result;
+                    asciiBytes = rsa.SignHash(sha1Hash, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
+                }
+            }
+
+            return Convert.ToBase64String(asciiBytes);
         }
 
         /// <summary>
@@ -59,14 +66,14 @@ namespace Unimake.Cryptography
         /// <returns>Conteúdo convertido para SH1HashData</returns>
         public static string ToSHA1HashData(string data, bool toUpper)
         {
-            using(HashAlgorithm algorithm = new SHA1CryptoServiceProvider())
+            using (HashAlgorithm algorithm = new SHA1CryptoServiceProvider())
             {
                 var buffer = algorithm.ComputeHash(Encoding.ASCII.GetBytes(data));
                 var builder = new StringBuilder(buffer.Length);
 
-                foreach(var num in buffer)
+                foreach (var num in buffer)
                 {
-                    if(toUpper)
+                    if (toUpper)
                     {
                         builder.Append(num.ToString("X2"));
                         continue;
