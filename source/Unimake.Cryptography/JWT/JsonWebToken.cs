@@ -98,7 +98,7 @@ namespace Unimake.Cryptography.JWT
             var parts = token.Split('.');
             var header = parts[0];
             var payload = parts[1];
-            byte[] crypto = Base64UrlDecode(parts[2]);
+            var crypto = Base64UrlDecode(parts[2]);
 
             var headerJson = Encoding.UTF8.GetString(Base64UrlDecode(header));
             var headerData = JObject.Parse(headerJson);
