@@ -11,35 +11,6 @@ namespace Unimake.Helpers_UtilitiesAndExtensions.Test.Cryptography
     {
         #region Private Methods
 
-        private static byte[] ConvertPemToBytes(string pem)
-        {
-            var pemHeader = "-----BEGIN PUBLIC KEY-----";
-            var pemFooter = "-----END PUBLIC KEY-----";
-            var base64 = pem.Replace(pemHeader, string.Empty)
-                            .Replace(pemFooter, string.Empty)
-                            .Trim();
-
-            return Convert.FromBase64String(base64);
-        }
-
-        private static bool ValidatePublicKey(string publicKey)
-        {
-            try
-            {
-                var publicKeyBytes = ConvertPemToBytes(publicKey);
-                using(RSA rsa = RSA.Create())
-                {
-                    rsa.ImportSubjectPublicKeyInfo(publicKeyBytes, out _);
-                    var originalMessage = Encoding.UTF8.GetBytes("Mensagem de teste");
-                    var encryptedMessage = rsa.Encrypt(originalMessage, RSAEncryptionPadding.Pkcs1);
-                    return encryptedMessage.Length > 0;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
 
         #endregion Private Methods
 
@@ -51,7 +22,7 @@ namespace Unimake.Helpers_UtilitiesAndExtensions.Test.Cryptography
             var publicKey = RSAHelper.CreatePublicKey();
             Assert.NotNull(publicKey);
             Assert.NotEmpty(publicKey);
-            Assert.True(ValidatePublicKey(publicKey));
+            Assert.True(RSAHelper.ValidatePublicKey(publicKey));
 
             var signed = LinkSigner.SignLink("https://unimake.app", "issuer", "subject", null, publicKey);
             Assert.NotNull(signed);
@@ -68,7 +39,7 @@ namespace Unimake.Helpers_UtilitiesAndExtensions.Test.Cryptography
             //invalidar a chave
             publicKey = RSAHelper.CreatePublicKey();
             publicKey = $"{publicKey[..48]}{publicKey[49..]}";
-            Assert.False(ValidatePublicKey(publicKey));
+            Assert.False(RSAHelper.ValidatePublicKey(publicKey));
         }
 
         #endregion Public Methods

@@ -9,8 +9,8 @@
 		<PackageProjectUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Unimake/Helpers-UtilitiesAndExtensions</RepositoryUrl>
 		<PackageTags>unimake;Utils;helpers;utilities</PackageTags>
-		<AssemblyVersion>2024.10.09.2029</AssemblyVersion>
-		<Version>20241009.2029.42</Version>
+		<AssemblyVersion>2024.10.16.1016</AssemblyVersion>
+		<Version>20241016.1016.27</Version>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<Description>Utilitários para criptografia de arquivos, strings e certificados.</Description>
@@ -30,6 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Unimake.Cryptography
 {
-    public class RSAHelper
+    public sealed class RSAHelper
     {
         #region Private Constructors
 
@@ -133,6 +134,17 @@ namespace Unimake.Cryptography
 
         #region Public Methods
 
+        public static byte[] ConvertPemToBytes(string pem)
+        {
+            var pemHeader = "-----BEGIN PUBLIC KEY-----";
+            var pemFooter = "-----END PUBLIC KEY-----";
+            var base64 = pem.Replace(pemHeader, string.Empty)
+                            .Replace(pemFooter, string.Empty)
+                            .Trim();
+
+            return Convert.FromBase64String(base64);
+        }
+
         public static string CreatePublicKey()
         {
             using(var csp = RSACryptoServiceProvider.Create())
@@ -142,6 +154,54 @@ namespace Unimake.Cryptography
                     ExportPublicKey(csp, outputStream);
                     return outputStream.ToString();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Valida a chave pública e retorna verdadeiro ou falso.
+        /// <para>Retorna o erro de validação, caso <paramref name="throwValidationError"/> for verdadeiro</para>
+        /// </summary>
+        /// <param name="publicKey">Chave pública</param>
+        /// <param name="throwValidationError">Se verdadeiro, é lançado o erro ao tentar validar a chave</param>
+        /// <param name="returnTrueIsNullOrWhiteSpace">Se verdadeiro e a chave <paramref name="publicKey"/> estiver vazia ou apenas espaços, retorna verdadeiro.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">Se <paramref name="returnTrueIsNullOrWhiteSpace"/> for falso e <paramref name="throwValidationError"/> for verdadeiro.</exception>
+        public static bool ValidatePublicKey(string publicKey, bool returnTrueIsNullOrWhiteSpace = false, bool throwValidationError = false)
+        {
+            if(string.IsNullOrWhiteSpace(publicKey))
+            {
+                if(returnTrueIsNullOrWhiteSpace)
+                {
+                    return true;
+                }
+
+                if(throwValidationError)
+                {
+                    throw new ArgumentException($"'{nameof(publicKey)}' cannot be null or whitespace.", nameof(publicKey));
+                }
+
+                return false;
+            }
+
+            try
+            {
+                var publicKeyBytes = ConvertPemToBytes(publicKey);
+                using(RSA rsa = RSA.Create())
+                {
+                    rsa.ImportSubjectPublicKeyInfo(publicKeyBytes);
+                    var originalMessage = Encoding.UTF8.GetBytes("Mensagem de teste");
+                    var encryptedMessage = rsa.Encrypt(originalMessage, RSAEncryptionPadding.Pkcs1);
+                    return encryptedMessage.Length > 0;
+                }
+            }
+            catch
+            {
+                if(throwValidationError)
+                {
+                    throw;
+                }
+
+                return false;
             }
         }
 
