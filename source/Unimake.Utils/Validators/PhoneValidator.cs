@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Unimake.Validators
+﻿namespace Unimake.Validators
 {
     public abstract class PhoneValidator
     {

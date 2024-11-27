@@ -607,89 +607,53 @@ namespace Unimake.Primitives.Parser.Barcode
         /// </summary>
         public class AII
         {
-            private string _ai;
-
             /// <summary>
             /// Application Identifier
             /// </summary>
-            public string AI
-            {
-                get => _ai;
-                set => _ai = value;
-            }
-
-            private string _description;
+            public string AI { get; set; }
 
             /// <summary>
             /// Description of AI
             /// </summary>
-            public string Description
-            {
-                get => _description;
-                set => _description = value;
-            }
-
-            private int _lengthOfAI;
+            public string Description { get; set; }
 
             /// <summary>
             /// Length of AI
             /// </summary>
-            public int LengthOfAI
-            {
-                get => _lengthOfAI;
-                set => _lengthOfAI = value;
-            }
-
-            private DataType _dataDescription;
+            public int LengthOfAI { get; set; }
 
             /// <summary>
             /// Data description of AI
             /// </summary>
-            public DataType DataDescription
-            {
-                get => _dataDescription;
-                set => _dataDescription = value;
-            }
-
-            private int _lengthOfData;
+            public DataType DataDescription { get; set; }
 
             /// <summary>
             /// Length of AI data
             /// </summary>
-            public int LengthOfData
-            {
-                get => _lengthOfData;
-                set => _lengthOfData = value;
-            }
-
-            private bool _FNC1;
+            public int LengthOfData { get; set; }
 
             /// <summary>
             /// The FNC1 is a single character Function Code 1, which  specifies that a barcode is a GS1 code
             /// </summary>
-            public bool FNC1
-            {
-                get => _FNC1;
-                set => _FNC1 = value;
-            }
+            public bool FNC1 { get; set; }
 
             /// <summary>
             /// Initialize the AI class
             /// </summary>
-            /// <param name="AI">Aplication identifier of code</param>
-            /// <param name="Description">Description of AI identifier</param>
-            /// <param name="LengthOfAI">Length of AI</param>
-            /// <param name="DataDescription">Description of AI data</param>
-            /// <param name="LengthOfData">Length of AI data</param>
-            /// <param name="FNC1">if true, use identify this code as GS1 code</param>
-            public AII(string AI, string Description, int LengthOfAI, DataType DataDescription, int LengthOfData, bool FNC1)
+            /// <param name="ai">Aplication identifier of code</param>
+            /// <param name="description">Description of AI identifier</param>
+            /// <param name="lengthOfAI">Length of AI</param>
+            /// <param name="dataDescription">Description of AI data</param>
+            /// <param name="lengthOfData">Length of AI data</param>
+            /// <param name="fnc1">if true, use identify this code as GS1 code</param>
+            public AII(string ai, string description, int lengthOfAI, DataType dataDescription, int lengthOfData, bool fnc1)
             {
-                this.AI = AI;
-                this.Description = Description;
-                this.LengthOfAI = LengthOfAI;
-                this.DataDescription = DataDescription;
-                this.LengthOfData = LengthOfData;
-                this.FNC1 = FNC1;
+                this.AI = ai;
+                this.Description = description;
+                this.LengthOfAI = lengthOfAI;
+                this.DataDescription = dataDescription;
+                this.LengthOfData = lengthOfData;
+                this.FNC1 = fnc1;
             }
 
             /// <summary>

@@ -46,7 +46,7 @@ namespace Unimake.Helpers_UtilitiesAndExtensions.Test.Net
 
             string[] urls;
 
-            foreach (string url in testUrls)
+            foreach(string url in testUrls)
             {
                 urls = new string[] { url };
 
@@ -58,7 +58,7 @@ namespace Unimake.Helpers_UtilitiesAndExtensions.Test.Net
                 "3.3.3.3",
             };
 
-            foreach (string url in testUrls)
+            foreach(string url in testUrls)
             {
                 urls = new string[] { url };
 

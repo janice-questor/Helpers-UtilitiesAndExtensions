@@ -8,8 +8,6 @@ namespace Unimake.Primitives.Security.Credentials
     {
         #region Private Fields
 
-        private string _clientIdOrAppId;
-
         private GrantType? _grantType;
 
         #endregion Private Fields
@@ -19,19 +17,15 @@ namespace Unimake.Primitives.Security.Credentials
         /// <summary>
         /// Se o <see cref="GrantType"/> for <see cref="GrantType.ClientCredentials"/>, a chave da aplicação deve ser informada
         /// </summary>
-        public string AppId
-        {
-            get => _clientIdOrAppId;
-            set => _clientIdOrAppId = value;
-        }
+        public string AppId { get; set; }
 
         /// <summary>
         /// Se o <see cref="GrantType"/> for <see cref="GrantType.ClientCredentials"/>, a chave do cliente deve ser informada
         /// </summary>
         public string ClientId
         {
-            get => _clientIdOrAppId;
-            set => _clientIdOrAppId = value;
+            get => AppId;
+            set => AppId = value;
         }
 
         /// <summary>
@@ -96,7 +90,7 @@ namespace Unimake.Primitives.Security.Credentials
                                    string scope = "")
         {
             _grantType = grantType;
-            _clientIdOrAppId = clientOrAppId;
+            AppId = clientOrAppId;
             Secret = secret;
             Username = username;
             Password = password;
@@ -124,7 +118,7 @@ namespace Unimake.Primitives.Security.Credentials
         {
             if(GrantType == GrantType.ClientCredentials)
             {
-                if(string.IsNullOrWhiteSpace(_clientIdOrAppId))
+                if(string.IsNullOrWhiteSpace(AppId))
                 {
                     throw new ArgumentException($"O valor da propriedade '{nameof(ClientId)}' ou '{nameof(AppId)}' deve ser informado quando o '{nameof(GrantType)}' for '{nameof(GrantType.ClientCredentials)}'.");
                 }

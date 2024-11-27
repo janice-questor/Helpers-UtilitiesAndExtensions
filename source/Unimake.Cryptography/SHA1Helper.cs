@@ -33,13 +33,13 @@ namespace Unimake.Cryptography
             var asciiBytes = asciiEncoding.GetBytes(value);
 
             // Gerar o HASH (array de bytes) utilizando SHA1
-            using (var sha1 = SHA1.Create())
+            using(var sha1 = SHA1.Create())
             {
                 var sha1Hash = sha1.ComputeHash(asciiBytes);
 
-                using (var rsa = certificado.GetRSAPrivateKey())
+                using(var rsa = certificado.GetRSAPrivateKey())
                 {
-                    if (rsa == null)
+                    if(rsa == null)
                     {
                         throw new InvalidOperationException("Chave privada RSA não encontrada no certificado.");
                     }
@@ -66,14 +66,14 @@ namespace Unimake.Cryptography
         /// <returns>Conteúdo convertido para SH1HashData</returns>
         public static string ToSHA1HashData(string data, bool toUpper)
         {
-            using (HashAlgorithm algorithm = new SHA1CryptoServiceProvider())
+            using(HashAlgorithm algorithm = new SHA1CryptoServiceProvider())
             {
                 var buffer = algorithm.ComputeHash(Encoding.ASCII.GetBytes(data));
                 var builder = new StringBuilder(buffer.Length);
 
-                foreach (var num in buffer)
+                foreach(var num in buffer)
                 {
-                    if (toUpper)
+                    if(toUpper)
                     {
                         builder.Append(num.ToString("X2"));
                         continue;

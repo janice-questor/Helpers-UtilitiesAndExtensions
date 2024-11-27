@@ -27,9 +27,9 @@ namespace Unimake.Net
             var addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList
                                .Where(w => w.AddressFamily == AddressFamily.InterNetwork);
 
-            foreach (var ip in addresses)
+            foreach(var ip in addresses)
             {
-                if (ignoreLoopback && IPAddress.IsLoopback(ip))
+                if(ignoreLoopback && IPAddress.IsLoopback(ip))
                 {
                     continue;
                 }
@@ -45,9 +45,9 @@ namespace Unimake.Net
             var addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList
                                .Where(w => w.AddressFamily == AddressFamily.InterNetworkV6);
 
-            foreach (var ip in addresses)
+            foreach(var ip in addresses)
             {
-                if (ignoreLoopback && IPAddress.IsLoopback(ip))
+                if(ignoreLoopback && IPAddress.IsLoopback(ip))
                 {
                     continue;
                 }
@@ -72,14 +72,14 @@ namespace Unimake.Net
             {
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
 
-                if (proxy != null)
+                if(proxy != null)
                 {
                     httpWebRequest.Proxy = proxy;
                 }
 
                 httpWebRequest.Method = method;
 
-                if (certificate != null)
+                if(certificate != null)
                 {
                     httpWebRequest.ClientCertificates.Add(certificate);
                 }
@@ -133,12 +133,12 @@ namespace Unimake.Net
 
             var proxy = autoDetect ? WebRequest.GetSystemWebProxy() : WebRequest.DefaultWebProxy;
 
-            if (proxy == null)
+            if(proxy == null)
             {
                 return default;
             }
 
-            if (!string.IsNullOrEmpty(user) &&
+            if(!string.IsNullOrEmpty(user) &&
                !string.IsNullOrEmpty(password))
                 proxy.Credentials = new NetworkCredential(user, password);
 
@@ -155,12 +155,12 @@ namespace Unimake.Net
         /// <returns>true = Tem conexão com a internet</returns>
         public static bool HasInternetConnection(IWebProxy proxy, int timeoutInSeconds = 3, string[] testUrls = null)
         {
-            if (timeoutInSeconds <= 0)
+            if(timeoutInSeconds <= 0)
             {
                 throw new ArgumentOutOfRangeException("O valor  do parâmetro 'timeoutInSeconds' deve ser maior que zero.");
             }
 
-            if (testUrls == null)
+            if(testUrls == null)
             {
                 testUrls = new string[] {
                     "http://clients3.google.com/generate_204",
@@ -179,9 +179,9 @@ namespace Unimake.Net
             var retorno = true;
             var timeoutMilleSeconds = (timeoutInSeconds * 1000);
 
-            foreach (var url in testUrls)
+            foreach(var url in testUrls)
             {
-                if (url.Substring(0, 7).Equals("http://"))
+                if(url.Substring(0, 7).Equals("http://"))
                 {
                     try
                     {
@@ -198,7 +198,7 @@ namespace Unimake.Net
                     retorno = PingHost(url, timeoutInSeconds);
                 }
 
-                if (retorno)
+                if(retorno)
                 {
                     break;
                 }
@@ -221,7 +221,7 @@ namespace Unimake.Net
                 var reply = ping.Send(ipAddress, timeoutInSeconds * 1000);
                 return (reply.Status == IPStatus.Success);
             }
-            catch (PingException)
+            catch(PingException)
             {
                 return false;
             }
@@ -246,19 +246,19 @@ namespace Unimake.Net
         {
             try
             {
-                using (var client = new WebClient())
+                using(var client = new WebClient())
                 {
-                    using (client.OpenRead(url))
+                    using(client.OpenRead(url))
                     {
                         return WebExceptionStatus.Success;
                     }
                 }
             }
-            catch (WebException ex)
+            catch(WebException ex)
             {
                 return ex.Status;
             }
-            catch (Exception)
+            catch(Exception)
             {
                 return WebExceptionStatus.UnknownError;
             }
