@@ -267,26 +267,26 @@ namespace System
         }
 
         /// <summary>
-        /// Retorna verdadeiro se identificar que a string é base64
+        /// Verifica se uma string é uma string válida codificada em Base64.
         /// </summary>
-        /// <param name="base64String"></param>
-        /// <returns></returns>
-        public static bool IsBase64(this string base64String)
+        /// <param name="input">A string a ser verificada.</param>
+        /// <returns>True se a string for válida em Base64; caso contrário, False.</returns>
+        public static bool IsBase64(this string input)
         {
             // Credit: oybek https://stackoverflow.com/users/794764/oybek
-            if(string.IsNullOrWhiteSpace(base64String) ||
-               base64String.Length % 4 != 0 ||
-               base64String.Contains(" ") ||
-               base64String.Contains("\t") ||
-               base64String.Contains("\r") ||
-               base64String.Contains("\n"))
+            if(string.IsNullOrWhiteSpace(input) ||
+               input.Length % 4 != 0 ||
+               input.Contains(" ") ||
+               input.Contains("\t") ||
+               input.Contains("\r") ||
+               input.Contains("\n"))
             {
                 return false;
             }
 
             try
             {
-                var s = Convert.FromBase64String(base64String);
+                _ = Convert.FromBase64String(input);
                 return true;
             }
             catch
