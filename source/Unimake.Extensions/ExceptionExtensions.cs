@@ -1,6 +1,7 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
-namespace System
+namespace SystemUnimake
 {
     /// <summary>
     /// Extensões de métodos para as exceções

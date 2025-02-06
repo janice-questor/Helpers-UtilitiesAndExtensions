@@ -1,6 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
-namespace System
+namespace SystemUnimake
 {
     /// <summary>
     /// Extensões para o tipo timespan

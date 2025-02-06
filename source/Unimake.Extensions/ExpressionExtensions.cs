@@ -1,4 +1,8 @@
-﻿namespace System.Linq.Expressions
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+
+namespace SystemUnimake.Linq.Expressions
 {
     public static class ExpressionExtensions
     {

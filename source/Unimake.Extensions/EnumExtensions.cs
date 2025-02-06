@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace System
+namespace SystemUnimake
 {
     /// <summary>
     /// Contém extensões úteis para trabalhar com tipos de enumeração.

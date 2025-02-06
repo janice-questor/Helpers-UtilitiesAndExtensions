@@ -1,10 +1,11 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace System
+namespace SystemUnimake
 {
     public static class StringExtensions
     {
@@ -248,7 +249,7 @@ namespace System
                 value = "";
             }
 
-            return Net.WebUtility.HtmlDecode(value);
+            return System.Net.WebUtility.HtmlDecode(value);
         }
 
         /// <summary>
@@ -263,7 +264,7 @@ namespace System
                 value = "";
             }
 
-            return Net.WebUtility.HtmlEncode(value);
+            return System.Net.WebUtility.HtmlEncode(value);
         }
 
         /// <summary>

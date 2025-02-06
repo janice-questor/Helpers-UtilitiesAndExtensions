@@ -1,4 +1,8 @@
-﻿namespace System.Reflection
+﻿
+using System;
+using System.Reflection;
+
+namespace SystemUnimake.Reflection
 {
     public static class PropertyExtensions
     {

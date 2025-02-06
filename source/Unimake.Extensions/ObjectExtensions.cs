@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using SystemUnimake.Collections.Generic;
 
-namespace System
+namespace SystemUnimake
 {
     /// <summary>
     /// Extensões para o tipo Object

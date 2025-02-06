@@ -1,4 +1,6 @@
-﻿namespace System.IO
+﻿using System.IO;
+
+namespace SystemUnimake.IO
 {
     /// <summary>
     /// Extensões para os tipo FileInfo

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Unimake.Threading
+namespace SystemUnimake.Threading
 {
     /// <summary>
     /// Helper para chamadas de tarefas síncronas
